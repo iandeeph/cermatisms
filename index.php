@@ -43,6 +43,41 @@ document.addEventListener('DOMContentLoaded', function () {
     Notification.requestPermission();
 });
 
+
+//Flashing title --------|||
+(function () {
+
+var original = document.title;
+var timeout;
+
+window.flashTitle = function (newMsg, howManyTimes) {
+    function step() {
+        document.title = (document.title == original) ? newMsg : original;
+
+        if (--howManyTimes > 0) {
+            timeout = setTimeout(step, 1000);
+        };
+    };
+
+    howManyTimes = parseInt(howManyTimes);
+
+    if (isNaN(howManyTimes)) {
+        howManyTimes = 20;
+    };
+
+    cancelFlashTitle(timeout);
+    step();
+};
+
+window.cancelFlashTitle = function () {
+    clearTimeout(timeout);
+    document.title = original;
+};
+
+}());
+
+//Flashing title ends ------ |||
+
 var lastIdMsg = <?php echo $lastIdMsg;?> || '';
 var newNotif = 0;
 $(document).ready(function(){
@@ -64,6 +99,7 @@ $(document).ready(function(){
                           window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
                         };
                     }
+
                     newNotif += data.length;
                     if($('#inboxNotif').find('span').length > 0) {
                         $('#inboxNotif').find('span').html(newNotif);
@@ -71,6 +107,8 @@ $(document).ready(function(){
                         $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
                     }
                     lastIdMsg = data[data.length - 1].ID;
+
+                    flashTitle("New SMS...!!!");
                 }
             }
         });
