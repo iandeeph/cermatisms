@@ -123,7 +123,7 @@ if(isset($_POST['submit'])&& $getName == ''){
 	      <h5 class="left">SMS with <?php echo $getName." - ".$_GET['number'];?></h5>
 	    </div>
 	    <div class="col s5">
-	      <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" onclick="javasrcipt:window.location.href='<?php echo './index.php?menu=thread&cat=detail&number='.$sender.'&lastID='.$lastIdMsg;?>"><i class="material-icons">replay</i></a>
+	      <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" onclick="javasrcipt:window.location.href='<?php echo './index.php?menu=thread&cat=detail&number='.$sender.'&lastID='.$lastIdMsg;?>'"><i class="material-icons">replay</i></a>
 	    </div>
 	    <div class="col s12">
 	      <h5 class="left">Case - <?php echo $getCase;?></h5>
