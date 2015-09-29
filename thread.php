@@ -1,5 +1,5 @@
 <?php
-$threadid = isset($_GET['threadid'])?$_GET['threadid']:'';
+$cat = isset($_GET['cat'])?$_GET['cat']:'';
 $userpriv = $_SESSION['user'];
 ?>
 <div class="row">
@@ -8,7 +8,7 @@ $userpriv = $_SESSION['user'];
     </div>
     <div class="col s12">
     	<?php
-    	switch ($threadid) {
+    	switch ($cat) {
 			case 'detail':
 				// <!-- Detail Thread Start  -->
 					include "detailthread.php";

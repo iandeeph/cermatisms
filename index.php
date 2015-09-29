@@ -1,8 +1,13 @@
 <?php
+ob_start();
 error_reporting(E_ALL);
 session_start();
 require "php/connconf.php";
 $menu = isset($_GET['menu'])?$_GET['menu']:'';
+
+    $queryLastId = mysql_query("SELECT max(ID) as lastId FROM inbox");
+    $resultLastId = mysql_fetch_array($queryLastId);
+    $lastIdMsg = $resultLastId['lastId'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,6 +32,51 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
         }
 
     </style>
+
+ <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+// request permission on page load
+document.addEventListener('DOMContentLoaded', function () {
+  if (Notification.permission !== "granted")
+    Notification.requestPermission();
+});
+
+var lastIdMsg = <?php echo $lastIdMsg;?> || '';
+var newNotif = 0;
+$(document).ready(function(){
+    setInterval(function(){
+        $.ajax({
+            url: './notif.php?last='+lastIdMsg,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if(data && data.length > 0) {
+                    for(i in data) {
+                        var notification = new Notification(
+                        "Message from " + data[i].SenderNumber, {
+                        icon: 'images/cermati.png',
+                        body: data[i].TextDecoded,
+                        });
+
+                        notification.onclick = function () {
+                          window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
+                        };
+                    }
+                    newNotif += data.length;
+                    if($('#inboxNotif').find('span').length > 0) {
+                        $('#inboxNotif').find('span').html(newNotif);
+                    } else {
+                        $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
+                    }
+                    lastIdMsg = data[data.length - 1].ID;
+                }
+            }
+        });
+    }, 5000);
+});
+</script>
   </head>
 
   <body>
@@ -49,25 +99,25 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
         	if(isset($_SESSION['logged'])) {
     		?>
             <li class="bold">
-            	<a href="index.php?menu=sendsms" class="waves-effect waves-teal">Send SMS</a>
+            	<a href="index.php?menu=sendsms&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Send SMS</a>
             </li>
             <li class="bold">
-            	<a href="index.php?menu=cekinbox" class="waves-effect waves-teal">Inbox</a>
+            	<a href="index.php?menu=cekinbox&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal" id="inboxNotif">Inbox</a>
             </li>
             <li class="bold">
-            	<a href="index.php?menu=sentitem" class="waves-effect waves-teal">Sent Item</a>
+            	<a href="index.php?menu=sentitem&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Sent Item</a>
             </li>
             <li class="bold">
-                <a href="index.php?menu=thread" class="waves-effect waves-teal">Thread</a>
+                <a href="index.php?menu=thread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Thread</a>
             </li>
             <?php
             if(isset($_SESSION['priv']) && $_SESSION['priv'] == 2) {
             ?>
             <li class="bold">
-                <a href="index.php?menu=logreport" class="waves-effect waves-teal">Log Report</a>
+                <a href="index.php?menu=logreport&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Log Report</a>
             </li>
             <li class="bold">
-                <a href="index.php?menu=simulation" class="waves-effect waves-teal">Inbox Simulation</a>
+                <a href="index.php?menu=simulation&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Inbox Simulation</a>
             </li>
             <?php }?>
             <li class="bold">
@@ -139,8 +189,5 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 		</div>
 	 </div>
     </main>
- <!--Import jQuery before materialize.js-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
   </body>
 </html>

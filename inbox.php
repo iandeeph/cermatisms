@@ -2,7 +2,6 @@
 	if(!isset($_GET['pages'])){
 		$_GET['pages'] = 1;
 	}
-
 	$perPages = 13;
 	$getInbox = mysql_query("SELECT * FROM inbox");
 	$totCont = mysql_num_rows($getInbox);

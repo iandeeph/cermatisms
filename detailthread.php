@@ -10,14 +10,22 @@ function sorter($a, $b){
     return ($ad-$bd);
 }
 $messages = array();
-if($_GET['name'] == ""){
+$getNumber = $_GET['number'];
+
+$queryCustomer = mysql_query("SELECT * FROM customer WHERE phone = '".$getNumber."'");
+$rowCustomer = mysql_fetch_array($queryCustomer);
+	$getName = $rowCustomer['name'];
+	$getCase = $rowCustomer['hal'];
+
+
+if($getName == ""){
 	$dissbut = "disabled";
 	$labelbut = "Add Customer Name";
 }else{
 	$dissbut = "";
 	$labelbut = "SEND";
 }
-if(isset($_POST['submit'])&& $_GET['name'] == ''){
+if(isset($_POST['submit'])&& $getName == ''){
 ?>
 <div class="row">
 	<div class="container">
@@ -44,83 +52,81 @@ if(isset($_POST['submit'])&& $_GET['name'] == ''){
 </div>
 <?php
 }else{
-	$senderurl = $_GET['senderid'];
-			$sender =$_GET['phone'];
-			if(isset($_POST['fillsubmit'])){
-				$query = "SHOW TABLE STATUS LIKE 'outbox'";
-                                              $result = mysql_query($query);
-                                              $data  = mysql_fetch_array($result);
-                                              $newID = $data['Auto_increment'];
+	$sender =$_GET['number'];
+	if(isset($_POST['fillsubmit'])){
+		$query = "SHOW TABLE STATUS LIKE 'outbox'";
+                                      $result = mysql_query($query);
+                                      $data  = mysql_fetch_array($result);
+                                      $newID = $data['Auto_increment'];
 
 
-				$name = $_POST['fillname'];
-				$case =$_POST['fillcase'];
-				$inserttocustomer = "INSERT INTO customer (name, phone, hal, smsID) VALUES ('".$name."', '".$sender."', '".$case."', '".$newID."')";
-				if (mysql_query($inserttocustomer)) {
-					header('Location:   ./index.php?menu=thread');
-				}else{
-			   	    echo "Error: ".mysql_error($conn);
-			    }
-			}
-if (isset ($_GET['senderid'])) {
+		$name = $_POST['fillname'];
+		$case =$_POST['fillcase'];
+		$inserttocustomer = "INSERT INTO customer (name, phone, hal, smsID) VALUES ('".$name."', '".$sender."', '".$case."', '".$newID."')";
+		if (mysql_query($inserttocustomer)) {
+			header('Location:   ./index.php?menu=thread');
+		}else{
+	   	    echo "Error: ".mysql_error($conn);
+	    }
+	}
 
-	$senderurl = $_GET['senderid'];
-	$sender =$_GET['phone'];
-	$name = $_GET['name'];
-	$case =$_GET['case'];
-	$userpriv = $_SESSION['priv'];
-	$messages = array();
-	if(isset($_SESSION['priv']) && $_SESSION['priv'] == 2 ){
-	$sentitems = "SELECT 
-					DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
-					SendingDateTime as time, TextDecoded  as text, 
-					Status 
-					FROM sentitems 
-					WHERE replace(replace(DestinationNumber,'+62','0'), '+628', '08') = '".$sender."'";
-	}else{
+	if (isset ($_GET['number'])) {
+		$sender =$_GET['number'];
+		$name = $getName;
+		$case =$getCase;
+		$userpriv = $_SESSION['priv'];
+		$messages = array();
+		if(isset($_SESSION['priv']) && $_SESSION['priv'] == 2 ){
 		$sentitems = "SELECT 
-					DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
-					SendingDateTime as time, TextDecoded  as text, 
-					Status 
-					FROM sentitems 
-					WHERE CreatorID != 'admin' AND replace(replace(DestinationNumber,'+62','0'), '+628', '08') = '".$sender."'";
-	}
-	$getMessages = mysql_query($sentitems) or die (mysql_error());
-	if(($getMessages && mysql_num_rows($getMessages))) {
-		while($msg = mysql_fetch_array($getMessages)) {
-			$msg['type'] = 'sentitems';
-			$messages[] = $msg;
+						DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
+						SendingDateTime as time, TextDecoded  as text, 
+						Status 
+						FROM sentitems 
+						WHERE replace(replace(DestinationNumber,'+62','0'), '+628', '08') = '".$sender."'";
+		}else{
+			$sentitems = "SELECT 
+						DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
+						SendingDateTime as time, TextDecoded  as text, 
+						Status 
+						FROM sentitems 
+						WHERE CreatorID != 'admin' AND replace(replace(DestinationNumber,'+62','0'), '+628', '08') = '".$sender."'";
 		}
-	}
-
-	$inbox = "SELECT 
-			DATE_FORMAT(ReceivingDateTime, '%e %b %Y - %k:%i') as date, 
-			ReceivingDateTime as time, 
-			TextDecoded as text 
-			FROM inbox 
-			WHERE replace(replace(SenderNumber,'+62','0'), '+628', '08') = '".$sender."'";
-
-	$getMessages = mysql_query($inbox) or die (mysql_error());
-	if(($getMessages && mysql_num_rows($getMessages))) {
-		while($msg = mysql_fetch_array($getMessages)) {
-			$msg['type'] = 'inbox';
-			$messages[] = $msg;
+		$getMessages = mysql_query($sentitems) or die (mysql_error());
+		if(($getMessages && mysql_num_rows($getMessages))) {
+			while($msg = mysql_fetch_array($getMessages)) {
+				$msg['type'] = 'sentitems';
+				$messages[] = $msg;
+			}
 		}
-	}
 
-	usort($messages, 'sorter');
+		$inbox = "SELECT 
+					DATE_FORMAT(ReceivingDateTime, '%e %b %Y - %k:%i') as date, 
+					ReceivingDateTime as time, 
+					TextDecoded as text 
+					FROM inbox 
+					WHERE replace(replace(SenderNumber,'+62','0'), '+628', '08') = '".$sender."'";
+
+		$getMessages = mysql_query($inbox) or die (mysql_error());
+		if(($getMessages && mysql_num_rows($getMessages))) {
+			while($msg = mysql_fetch_array($getMessages)) {
+				$msg['type'] = 'inbox';
+				$messages[] = $msg;
+			}
+		}
+
+		usort($messages, 'sorter');
 
 ?>
 <div class="row">
 	<div class="container">
 		<div class="col s7">
-	      <h5 class="left">SMS with <?php echo $senderurl;?></h5>
+	      <h5 class="left">SMS with <?php echo $getName." - ".$_GET['number'];?></h5>
 	    </div>
 	    <div class="col s5">
 	      <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" onclick="javasrcipt:window.location.href='<?php echo './index.php?menu=thread&threadid=detail&senderid='.$senderurl.'&phone='.$sender.'&case='.$case.'&name='.$name.'';?>'"><i class="material-icons">replay</i></a>
 	    </div>
 	    <div class="col s12">
-	      <h5 class="left">Case - <?php echo $case;?></h5>
+	      <h5 class="left">Case - <?php echo $getCase;?></h5>
 	    </div>
 		<div class="col s12 z-depth-1" style="padding-top:20px; padding-bottom:20px;">
 		    <form class="col s12" method="POST" action="">
@@ -179,7 +185,7 @@ if (isset ($_GET['senderid'])) {
 				     if(isset($_POST['message'])) {
 					    $postNumber=$sender;
 					    $postMsg=$_POST['message'];
-					    $postname=$_GET['name'];
+					    $postname=$getName;
 					    $postcase=$case;
 					    $user=$_SESSION['user'];
 					    $query = "SHOW TABLE STATUS LIKE 'outbox'";

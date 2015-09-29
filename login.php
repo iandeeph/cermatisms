@@ -33,10 +33,11 @@ if(isset($_POST['submit'])){
   $row = mysql_fetch_array($result);
 
   if(mysql_num_rows($result) == 1){ 
+
     $_SESSION['logged'] = 1;
     $_SESSION['user'] = $_POST['username'];
     $_SESSION['priv'] = $row['priviledge'];
-    header('Location:   index.php');
+    header('Location:   index.php?menu=home&lastID='.$lastIdMsg);
     exit;
   } else { echo "Username dan Password Salah.!!";
   }

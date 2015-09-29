@@ -81,7 +81,7 @@ while($mergerow = mysql_fetch_array($mergequery)){
 				$case = "-";
 		}
 	
-	echo '<a href="index.php?menu=thread&threadid=detail&senderid='.$name.'&phone='.$mergerow['number'].'&case='.$case.'&name='.$urlname.'" class="collection-item">';
+	echo '<a href="index.php?menu=thread&cat=detail&number='.$mergerow['number'].'&lastID='.$lastIdMsg.'" class="collection-item">';
 	?>
 	<span style="display:inline-block; width:300"><?php echo $mergerow['date'];?></span>
 	<span style="display:inline-block; width:500"><?php echo $name;?></span>
