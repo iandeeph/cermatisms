@@ -7,7 +7,7 @@ $queryNewMsg = mysql_query("SELECT *, replace(replace(replace(SenderNumber,'+62'
 $newMsg = mysql_num_rows($queryNewMsg);
 
 if($newMsg > 0) {
-	$res = [];
+	$res = array();
 	while($msg = mysql_fetch_array($queryNewMsg)) {
 		$res[] = $msg;
 	}
