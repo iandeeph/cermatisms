@@ -17,7 +17,7 @@ header ('Location : ./');
       </div>
       <div class="input-field col s6 ">
         <i class="material-icons prefix">contact_phone</i>
-        <input id="icon_telephone" type="tel" class="validate" name="number" pattern="^0[0-9]{10,12}|^\(?\+62[0-9]{10,12}" required >
+        <input id="icon_telephone" type="tel" class="validate" name="number" pattern="^0[0-9]{9,12}|^\(?\+62[0-9]{9,12}" required >
         <label for="icon_telephone">Phone Number</label>
       </div>
       <div class="input-field col s12 ">
