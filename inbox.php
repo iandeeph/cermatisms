@@ -85,7 +85,7 @@
 				    }
 				}
 				$inboxItemPerPages = mysql_query("SELECT * ,
-									replace(replace(replace(SenderNumber,'+62','0'),'62', '0'), '+628', '08') as number, 
+									replace(replace(SenderNumber,'+62','0'), '+628', '08') as number, 
 									DATE_FORMAT(ReceivingDateTime, '%e %b %Y - %k:%i') as date 
 									FROM inbox 
 									ORDER BY ReceivingDateTime DESC LIMIT ".$perPages." OFFSET ".$start." ");
