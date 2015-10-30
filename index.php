@@ -148,6 +148,9 @@ $(document).ready(function(){
             <li class="bold">
                 <a href="index.php?menu=thread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Thread</a>
             </li>
+            <li class="bold">
+                <a href="index.php?menu=mythread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">My Thread</a>
+            </li>
             <?php
             if(isset($_SESSION['priv']) && $_SESSION['priv'] == 2) {
             ?>
@@ -159,7 +162,7 @@ $(document).ready(function(){
             </li>
             <?php }?>
             <li class="bold">
-            	<a href="index.php?menu=logout" class="waves-effect waves-teal">Logout</a>
+            	<a href="index.php?menu=logout" class="waves-effect waves-teal">Logout [ <?php echo $_SESSION['user'];?> ]</a>
             </li>
             <?php
         }
@@ -193,6 +196,11 @@ $(document).ready(function(){
                     case 'thread':
                         // <!-- thread Start  -->
                             include "thread.php";
+                        //<!-- thread End  -->
+                        break;
+                    case 'mythread':
+                        // <!-- thread Start  -->
+                            include "mythread.php";
                         //<!-- thread End  -->
                         break;
                     case 'logreport':
