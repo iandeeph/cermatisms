@@ -46,12 +46,40 @@
 	}
 ?>
 <div class="row">
-	<div class="col s8">
+	<div class="col s5">
 		<h3>Inbox</h3>
 	</div>
-	<div class="col s4">
-      <a class="btn-floating btn-large waves-effect waves-light blue lighten-2 right" href="javascript:history.go(0)" style="margin-top:30px"><i class="material-icons">replay</i></a>
+	<div class="col s7" style="margin-top:30px">
+		<a class="btn-floating btn-large waves-effect waves-light blue lighten-2 right" href="javascript:history.go(0)"><i class="material-icons">replay</i></a>
     </div>
+    <!-- FILTERING
+    <div class="col s12">
+		<ul class="collapsible" data-collapsible="accordion">
+			<li>
+				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
+				<div class="col s12 collapsible-body" style="margin-top:30px;">
+					<form action="" method="POST">
+						<div class="col s3">
+							<label class="active" for="datefrom">Date From</label>
+							<input id="datefrom" type="date" class="datepicker">
+						</div>
+						<div class="col s3">
+							<label class="active" for="dateto">Date To</label>
+							<input id="dateto" type="date" class="datepicker">
+						</div>
+						<div class="col s3">
+							<label class="active" for="sender">sender</label>
+							<input placeholder="name/phone number" id ="sender" type="text" class="validate">							
+						</div>
+						<div class="col s3">
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</a>
+						</div>
+					</form>
+				</div>
+			</li>
+		</ul>
+	</div>
+	-->
 	<div class="col s12">
 		<table class="striped">
 			<thead>
@@ -125,12 +153,12 @@
 			<tbody>
 		</table>
 	</div>
-	<div class="container">
-		<div class="col s12">
+	<div class="col s12">
+		<div class="center">
 			<ul class="pagination">
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
-		for ($j=1; $j <= $tpages; $j++) {
+		for ($j=1; $j <= 10; $j++) {
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
@@ -138,7 +166,7 @@
 		}
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
-			  </ul>
+			</ul>
 		</div>
 	</div>
 </div>

@@ -12,7 +12,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 <!DOCTYPE html>
 <html>
   <head>
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -31,90 +31,16 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
          padding-left: 240px;
         }
 
+        .pagination {
+         display: inline-block;
+        }
+        .pagination > li{
+            display: inline;
+            width: auto;
+            height: 35px;
+            padding: 5px 15px;
+        }
     </style>
-
- <!--Import jQuery before materialize.js-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script>
-// request permission on page load
-document.addEventListener('DOMContentLoaded', function () {
-  if (Notification.permission !== "granted")
-    Notification.requestPermission();
-});
-
-
-//Flashing title --------|||
-(function () {
-
-var original = document.title;
-var timeout;
-
-window.flashTitle = function (newMsg, howManyTimes) {
-    function step() {
-        document.title = (document.title == original) ? newMsg : original;
-
-        if (--howManyTimes > 0) {
-            timeout = setTimeout(step, 1000);
-        };
-    };
-
-    howManyTimes = parseInt(howManyTimes);
-
-    if (isNaN(howManyTimes)) {
-        howManyTimes = 20;
-    };
-
-    cancelFlashTitle(timeout);
-    step();
-};
-
-window.cancelFlashTitle = function () {
-    clearTimeout(timeout);
-    document.title = original;
-};
-
-}());
-
-//Flashing title ends ------ |||
-
-var lastIdMsg = <?php echo $lastIdMsg;?> || '';
-var newNotif = 0;
-$(document).ready(function(){
-    setInterval(function(){
-        $.ajax({
-            url: './notif.php?last='+lastIdMsg,
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                if(data && data.length > 0) {
-                    for(i in data) {
-                        var notification = new Notification(
-                        "Message from " + data[i].SenderNumber, {
-                        icon: 'images/cermati.png',
-                        body: data[i].TextDecoded,
-                        });
-
-                        notification.onclick = function () {
-                          window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
-                        };
-                    }
-
-                    newNotif += data.length;
-                    if($('#inboxNotif').find('span').length > 0) {
-                        $('#inboxNotif').find('span').html(newNotif);
-                    } else {
-                        $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
-                    }
-                    lastIdMsg = data[data.length - 1].ID;
-
-                    flashTitle("New SMS...!!!");
-                }
-            }
-        });
-    }, 5000);
-});
-</script>
   </head>
 
   <body>
@@ -138,6 +64,9 @@ $(document).ready(function(){
     		?>
             <li class="bold">
             	<a href="index.php?menu=sendsms&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Send SMS</a>
+            </li>
+            <li class="bold">
+                <a href="index.php?menu=blasting&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">SMS Blasting</a>
             </li>
             <li class="bold">
             	<a href="index.php?menu=cekinbox&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal" id="inboxNotif">Inbox</a>
@@ -181,13 +110,11 @@ $(document).ready(function(){
 							include "sendsms.php";
 						//<!-- Send SMS Form End  -->
 						break;
-
 					case 'cekinbox':
 						// <!-- Inbox Start  -->
 							include "inbox.php";
 						//<!-- Inbox End  -->
 						break;
-
 					case 'sentitem':
 						// <!-- Inbox Start  -->
 							include "sentitem.php";
@@ -202,6 +129,11 @@ $(document).ready(function(){
                         // <!-- thread Start  -->
                             include "mythread.php";
                         //<!-- thread End  -->
+                        break;
+                    case 'blasting':
+                        // <!-- SMS BLASTING Start  -->
+                            include "blasting.php";
+                        //<!-- SMS BLASTING End  -->
                         break;
                     case 'logreport':
                         // <!-- log Start  -->
@@ -235,5 +167,104 @@ $(document).ready(function(){
 		</div>
 	 </div>
     </main>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        // request permission on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        });
+
+
+        //Flashing title --------|||
+        (function () {
+
+        var original = document.title;
+        var timeout;
+
+        window.flashTitle = function (newMsg, howManyTimes) {
+            function step() {
+                document.title = (document.title == original) ? newMsg : original;
+
+                if (--howManyTimes > 0) {
+                    timeout = setTimeout(step, 1000);
+                };
+            };
+
+            howManyTimes = parseInt(howManyTimes);
+
+            if (isNaN(howManyTimes)) {
+                howManyTimes = 20;
+            };
+
+            cancelFlashTitle(timeout);
+            step();
+        };
+
+        window.cancelFlashTitle = function () {
+            clearTimeout(timeout);
+            document.title = original;
+        };
+
+        }());
+
+        //Flashing title ends ------ |||
+
+        var lastIdMsg = <?php echo $lastIdMsg;?> || '';
+        var newNotif = 0;
+        $(document).ready(function(){
+            setInterval(function(){
+                $.ajax({
+                    url: './notif.php?last='+lastIdMsg,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if(data && data.length > 0) {
+                            for(i in data) {
+                                var notification = new Notification(
+                                "Message from " + data[i].SenderNumber, {
+                                icon: 'images/cermati.png',
+                                body: data[i].TextDecoded,
+                                });
+
+                                notification.onclick = function () {
+                                  window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
+                                };
+                            }
+
+                            newNotif += data.length;
+                            if($('#inboxNotif').find('span').length > 0) {
+                                $('#inboxNotif').find('span').html(newNotif);
+                            } else {
+                                $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
+                            }
+                            lastIdMsg = data[data.length - 1].ID;
+
+                            flashTitle("New SMS...!!!");
+                        }
+                    }
+                });
+            }, 5000);
+        });
+
+        $(document).ready(function(){
+            $('.collapsible').collapsible({
+                accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+
+            $('.datepicker').pickadate({
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 15, // Creates a dropdown of 15 years to control year
+                closeOnSelect: true
+            });
+        });
+
+        $(document).ready(function(){
+            $('.tooltipped').tooltip({delay: 50});
+          });
+    </script>
   </body>
 </html>
