@@ -49,7 +49,7 @@ if(isset($_POST['fileContent'])) {
   $postFilePath = $_POST['filePath'];
 }
 if(isset($_POST['phoneNumber'])) {
-  $nmbr = explode("\n", $_POST['phoneNumber']);
+  $nmbr = explode("\n", str_replace("\r", "", $_POST['phoneNumber']));
   foreach ($nmbr as $number) {
     $msg = array();
     $postMsg=$_POST['message'];
