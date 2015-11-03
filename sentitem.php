@@ -138,7 +138,7 @@
 									$nametodel = NULL;
 
 							}
-							echo "<tr><td style='word-wrap:break-word'>".$msg['date']."</td><td>".$name."</td><td style='word-wrap:break-word'>".$case."</td><td 
+							echo "<tr class='clickable-row' data-href='index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg."'><td style='word-wrap:break-word'>".$msg['date']."</td><td>".$name."</td><td style='word-wrap:break-word'>".$case."</td><td 
 style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-text'>".$status."</td><td>".$msg['CreatorID']."</td>";
 							?>
 							<td style="vertical-align:middle;">
