@@ -225,13 +225,13 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                         if(data && data.length > 0) {
                             for(i in data) {
                                 var notification = new Notification(
-                                "Message from " + data[i].SenderNumber, {
+                                "Message from " + data[i].number, {
                                 icon: 'images/cermati.png',
                                 body: data[i].TextDecoded,
                                 });
 
                                 notification.onclick = function () {
-                                  window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
+                                  window.open("index.php?menu=thread&cat=detail&number="+data[i].number+"&lastID="+data[i].ID);      
                                 };
 
                                 setTimeout(notification.close.bind(notification), 3000);
@@ -267,6 +267,12 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
         $(document).ready(function(){
             $('.tooltipped').tooltip({delay: 50});
           });
+
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        });
     </script>
   </body>
 </html>
