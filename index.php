@@ -233,6 +233,8 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                                 notification.onclick = function () {
                                   window.open("index.php?menu=thread&cat=detail&number="+data[i].SenderNumber+"&lastID="+data[i].ID);      
                                 };
+
+                                setTimeout(notification.close.bind(notification), 3000);
                             }
 
                             newNotif += data.length;
