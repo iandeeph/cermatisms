@@ -12,7 +12,7 @@ function sorter($a, $b){
 $messages = array();
 $getNumber = $_GET['number'];
 
-$queryCustomer = mysql_query("SELECT * FROM customer WHERE phone = '".$getNumber."'");
+$queryCustomer = mysql_query("SELECT * FROM customer WHERE phone = '".$getNumber."' ORDER BY idCust DESC LIMIT 1");
 $rowCustomer = mysql_fetch_array($queryCustomer);
 	$getName = $rowCustomer['name'];
 	$getCase = $rowCustomer['hal'];
