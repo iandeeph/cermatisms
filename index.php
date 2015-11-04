@@ -61,36 +61,37 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
         	<hr style="width:80%"/>
         	<?php
         	if(isset($_SESSION['logged'])) {
+                $getMenu = $_GET['menu'];
     		?>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'sendsms'){echo 'active';} ?>">
             	<a href="index.php?menu=sendsms&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Send SMS</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'blasting'){echo 'active';} ?>">
                 <a href="index.php?menu=blasting&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">SMS Blasting</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'cekinbox'){echo 'active';} ?>">
             	<a href="index.php?menu=cekinbox&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal" id="inboxNotif">Inbox</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'sentitem'){echo 'active';} ?>">
             	<a href="index.php?menu=sentitem&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Sent Item</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'thread'){echo 'active';} ?>">
                 <a href="index.php?menu=thread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Thread</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'mythread'){echo 'active';} ?>">
                 <a href="index.php?menu=mythread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">My Thread</a>
             </li>
             <?php
             if(isset($_SESSION['priv']) && $_SESSION['priv'] == 2) {
             ?>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'logreport'){echo 'active';} ?>">
                 <a href="index.php?menu=logreport&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Log Report</a>
             </li>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'simulation'){echo 'active';} ?>">
                 <a href="index.php?menu=simulation&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Inbox Simulation</a>
             </li>
             <?php }?>
-            <li class="bold">
+            <li class="bold <?php if ($getMenu == 'logout'){echo 'active';} ?>">
             	<a href="index.php?menu=logout" class="waves-effect waves-teal">Logout [ <?php echo $_SESSION['user'];?> ]</a>
             </li>
             <?php
@@ -106,7 +107,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 				if(isset($_SESSION['logged'])) {		
 				switch ($menu) {
 					case 'sendsms':
-						// <!-- Send SMS Form Start  -->
+						// <!-- Send SMS Form Start  --> 
 							include "sendsms.php";
 						//<!-- Send SMS Form End  -->
 						break;
@@ -243,7 +244,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                             } else {
                                 $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
                             }
-                            
+
                             lastIdMsg = data[data.length - 1].ID;
 
                             flashTitle("New SMS...!!!");

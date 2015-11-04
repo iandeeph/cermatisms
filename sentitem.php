@@ -40,12 +40,14 @@
 	}else{$dissright="";}
 
 	if ($curPages > 1) {
-		$prevPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$prevCurPage = $_GET['pages'] - 1;
+		$prevCurPages = $curPages-1;
+		$prevPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$prevCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$prevPage = '';
 	}
 	if ($curPages < $tpages) {
-		$nextPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$nextCurPage = $_GET['pages'] + 1;
+		$nextCurPages = $curPages+1;
+		$nextPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$nextCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$nextPage = '';
 	}
@@ -165,7 +167,7 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
 		if($curPages > 4){
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'>1 ... </a></li>";
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
 			$firstPosPage = $curPages-4;
 			$lastPosPage = $curPages+4;
 		} else {
@@ -178,10 +180,10 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
-			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$j."'>".$j."</a></li>";
+			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
 
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'> ... ".$totPages."</a></li>";
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$totPages."'> ... ".$totPages."</a></li>";
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
 			  </ul>

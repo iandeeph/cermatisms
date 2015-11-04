@@ -35,12 +35,14 @@
 	}else{$dissright="";}
 
 	if ($curPages > 1) {
-		$prevPage = $_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$prevCurPage = $_GET['pages'] - 1;
+		$prevCurPages = $curPages-1;
+		$prevPage = $_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$prevCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$prevPage = '';
 	}
 	if ($curPages < $tpages) {
-		$nextPage = $_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$nextCurPage = $_GET['pages'] + 1;
+		$nextCurPages = $curPages+1;
+		$nextPage = $_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$nextCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$nextPage = '';
 	}
@@ -117,6 +119,8 @@
 									DATE_FORMAT(ReceivingDateTime, '%e %b %Y - %k:%i') as date 
 									FROM inbox 
 									ORDER BY ReceivingDateTime DESC LIMIT ".$perPages." OFFSET ".$start." ");
+								
+
 				if($inboxItemPerPages && mysql_num_rows($inboxItemPerPages) > 0 && isset($_SESSION['priv'])) {
 					while($msg = mysql_fetch_array($inboxItemPerPages)) {
 						$query = mysql_query("SELECT *,replace(replace(phone,'+62','0'), '+628', '08') as number FROM customer WHERE phone = '".$msg["number"]."'");
@@ -133,19 +137,32 @@
 									$custid = NULL;
 									$nametodel = NULL;
 							}
-						echo "<tr class='clickable-row' data-href='index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg."'><td style='word-wrap:break-word'>".$msg['date']."</td><td>".$name."</td><td style='word-wrap:break-word'>".$case."</td><td style='word-wrap:break-word; widht:200px;'>".$msg['TextDecoded']."</td>";
-						?>
-						<td style="vertical-align:middle;">
-							<form class="" method="POST" action="">
-								<input name="number" type="hidden" value="<?php echo $msg['number'];?>">
-								<input name="message" type="hidden" value="<?php echo $msg['TextDecoded'];?>">
-								<input name="name" type="hidden" value="<?php echo $nametodel;?>">
-								<input name="case" type="hidden" value="<?php echo $case;?>">
-								<input name="inboxid" type="hidden" value="<?php echo $msg['ID'];?>">
-								<input name="customerid" type="hidden" value="<?php echo $custid;?>">
-					      		<button class="valign btn-floating btn-small waves-effect waves-light red lighten-2" type="submit" name="submit"><i class="material-icons">delete</i></button>
-					      	</form>
-					    </td></tr>
+							$urlToThread = "index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg;
+				?>
+						<tr class="clickable-row" data-href="<?php echo $urlToThread;?>">
+							<td style='word-wrap:break-word'>
+								<?php echo  $msg['date'];?>
+							</td>
+							<td>
+								<?php echo $name;?>
+							</td>
+							<td style='word-wrap:break-word'>
+								<?php echo $case;?>
+							</td>
+							<td style='word-wrap:break-word; widht:200px;'>
+								<?php echo $msg['TextDecoded'];?>
+							</td>						
+							<td style="vertical-align:middle;">
+								<form class="" method="POST" action="">
+									<input name="number" type="hidden" value="<?php echo $msg['number'];?>">
+									<input name="message" type="hidden" value="<?php echo $msg['TextDecoded'];?>">
+									<input name="name" type="hidden" value="<?php echo $nametodel;?>">
+									<input name="case" type="hidden" value="<?php echo $case;?>">
+									<input name="inboxid" type="hidden" value="<?php echo $msg['ID'];?>">
+									<input name="customerid" type="hidden" value="<?php echo $custid;?>">
+						      		<button class="valign btn-floating btn-small waves-effect waves-light red lighten-2" type="submit" name="submit"><i class="material-icons">delete</i></button>
+						      	</form>
+						    </td></tr>
 						<?php
 					}
 				}
@@ -159,7 +176,7 @@
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
 		if($curPages > 4){
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'>1 ... </a></li>";
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
 			$firstPosPage = $curPages-4;
 			$lastPosPage = $curPages+4;
 		} else {
@@ -172,10 +189,10 @@
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
-			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$j."'>".$j."</a></li>";
+			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
 
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'> ... ".$totPages."</a></li>";
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$totPages."'> ... ".$totPages."</a></li>";
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
 			</ul>
