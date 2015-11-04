@@ -10,12 +10,12 @@ $mergetable = "SELECT
 					SELECT 
 						max(date) as date, 
 						number, 
-						sum(TotalSMS) as TotalSMS 
+						sum(TotalSMS) as TotalSMS
 						FROM (
 							select 
 								max(ReceivingDateTime) as date, 
 								replace(replace(SenderNumber,'+62','0'), '+628', '08') as number, 
-								count(TextDecoded) as TotalSMS 
+								count(TextDecoded) as TotalSMS
 								FROM inbox
 								GROUP BY number 
 
@@ -38,12 +38,12 @@ $mergetable = "SELECT
 					SELECT 
 						max(date) as date, 
 						number, 
-						sum(TotalSMS) as TotalSMS 
+						sum(TotalSMS) as TotalSMS
 						FROM (
 							select 
 								max(ReceivingDateTime) as date, 
 								replace(replace(SenderNumber,'+62','0'), '+628', '08') as number, 
-								count(TextDecoded) as TotalSMS 
+								count(TextDecoded) as TotalSMS
 								FROM inbox 
 								GROUP BY number 
 
@@ -62,6 +62,7 @@ $mergetable = "SELECT
 <!-- start -->				
 <div class="collection">
 <?php
+$newSMS = 0;
 $mergequery = mysql_query($mergetable);
 while($mergerow = mysql_fetch_array($mergequery)){
 
@@ -80,13 +81,22 @@ while($mergerow = mysql_fetch_array($mergequery)){
 				$urlname = "";
 				$case = "-";
 		}
-	
-	echo '<a href="index.php?menu=thread&cat=detail&number='.$mergerow['number'].'&lastID='.$lastIdMsg.'" class="collection-item">';
+
+	$queryNewSMS = mysql_query("SELECT count(readStatus) as newSMS FROM inbox where readStatus = 'unread' and SenderNumber = '".$mergerow['number']."'");
+	$rowNewSMS = mysql_fetch_array($queryNewSMS);
+
+	echo '<a href="index.php?menu=thread&cat=detail&number='.$mergerow['number'].'&lastID='.$lastIdMsg.'" class="collection-item new">';
 	?>
 	<span style="display:inline-block; width:150px"><?php echo $mergerow['date'];?></span>
 	<span style="display:inline-block; width:350px"><?php echo $name;?></span>
 	<span style="display:inline-block; width:700px"><?php echo $case;?></span>
-	<span class="badge"><?php echo $mergerow['TotalSMS'];?></span>
+	<?php
+		if($rowNewSMS['newSMS'] == 0){
+			echo '<span class="badge">'.$mergerow['TotalSMS'].'</span>';			
+		} else {
+			echo '<span class="new badge">'.$rowNewSMS['newSMS'].'</span>';
+		}
+	?>
 	</a>
 	<?php
 	}

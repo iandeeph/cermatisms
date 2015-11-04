@@ -158,12 +158,24 @@
 			<ul class="pagination">
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
-		for ($j=1; $j <= 10; $j++) {
+		if($curPages > 4){
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'>1 ... </a></li>";
+			$firstPosPage = $curPages-4;
+			$lastPosPage = $curPages+4;
+		} else {
+			$firstPosPage = 1;
+			$lastPosPage = 10;
+		}
+
+		
+		for ($j=$firstPosPage; $j <= $lastPosPage; $j++) {
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
 			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=cekinbox&pages=".$j."'>".$j."</a></li>";
 		}
+
+			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1'> ... ".$totPages."</a></li>";
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
 			</ul>

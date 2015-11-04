@@ -243,6 +243,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                             } else {
                                 $('#inboxNotif').append('<span class="new badge">' +  newNotif + '</span>');
                             }
+                            
                             lastIdMsg = data[data.length - 1].ID;
 
                             flashTitle("New SMS...!!!");

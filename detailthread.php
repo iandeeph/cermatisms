@@ -12,6 +12,11 @@ function sorter($a, $b){
 $messages = array();
 $getNumber = $_GET['number'];
 
+$queryUpdateReadStatus = "UPDATE inbox SET readStatus = 'read' WHERE SenderNumber = '".$getNumber."'";
+if (!mysql_query($queryUpdateReadStatus)) {
+	echo "Error: ".$queryUpdateReadStatus. " ".mysql_error($conn);
+ }
+
 $queryCustomer = mysql_query("SELECT * FROM customer WHERE phone = '".$getNumber."' ORDER BY idCust DESC LIMIT 1");
 $rowCustomer = mysql_fetch_array($queryCustomer);
 	$getName = $rowCustomer['name'];
@@ -130,7 +135,7 @@ if(isset($_POST['submit'])&& $getName == ''){
 	    </div>
 		<div class="col s12 z-depth-1" style="padding-top:20px; padding-bottom:20px;">
 		    <form class="col s12" method="POST" action="">
-		    	<div class="col s12" style="height:55%; overflow-y: auto;">
+		    	<div class="col s12" style="height:500px; overflow-y:auto;">
 		<?php
 			foreach($messages as $msg) {
 				if (isset($msg['Status'])) {
