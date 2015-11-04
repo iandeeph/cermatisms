@@ -82,8 +82,12 @@ while($mergerow = mysql_fetch_array($mergequery)){
 				$case = "-";
 		}
 
-	$queryNewSMS = mysql_query("SELECT count(readStatus) as newSMS FROM inbox where readStatus = 'unread' and SenderNumber = '".$mergerow['number']."'");
-	$rowNewSMS = mysql_fetch_array($queryNewSMS);
+	if($queryNewSMS = mysql_query("SELECT count(readStatus) as newSMS FROM inbox where readStatus = 'unread' and replace(replace(SenderNumber,'+62','0'), '+628', '08') = '".$mergerow['number']."'")){
+		$rowNewSMS = mysql_fetch_array($queryNewSMS);
+	}else{
+		echo mysql_error($conn);
+	}
+	
 
 	echo '<a href="index.php?menu=thread&cat=detail&number='.$mergerow['number'].'&lastID='.$lastIdMsg.'" class="collection-item new">';
 	?>

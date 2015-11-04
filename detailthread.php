@@ -12,7 +12,7 @@ function sorter($a, $b){
 $messages = array();
 $getNumber = $_GET['number'];
 
-$queryUpdateReadStatus = "UPDATE inbox SET readStatus = 'read' WHERE SenderNumber = '".$getNumber."'";
+$queryUpdateReadStatus = "UPDATE inbox SET readStatus = 'read' WHERE replace(replace(SenderNumber,'+62','0'), '+628', '08') = '".$getNumber."'";
 if (!mysql_query($queryUpdateReadStatus)) {
 	echo "Error: ".$queryUpdateReadStatus. " ".mysql_error($conn);
  }
