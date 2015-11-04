@@ -169,7 +169,11 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 		if($curPages > 4){
 			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
 			$firstPosPage = $curPages-4;
-			$lastPosPage = $curPages+4;
+			if($curPages == $totPages){
+				$lastPosPage = $totPages;
+			}else{
+				$lastPosPage = $curPages+4;
+			}
 		} else {
 			$firstPosPage = 1;
 			$lastPosPage = 10;
