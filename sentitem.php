@@ -59,6 +59,24 @@
 	<div class="col s4">
       <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" href="javascript:history.go(0)" style="margin-top:30px"><i class="material-icons">replay</i></a>
     </div>
+<?php
+if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
+$getPendingitems = mysql_query("SELECT * FROM outbox");
+}else{
+$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID != 'admin'");
+}
+
+$totCont = mysql_num_rows($getPendingitems);
+
+if($totCont == 0) {
+	$fontColor = 'green';
+}else{
+	$fontColor = 'red';
+}
+?>
+	<div class="col s12">
+		<a class='<?php echo $fontColor;?>-text' href='./?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
+	</div>
 	<div class="col s12">
 		<table class="striped">
 			<thead>
@@ -175,8 +193,13 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
-			$lastPosPage = 10;
-			$liLastPage = $lastPage;
+			if($totPages < 10){
+				$lastPosPage = $totPages;
+				$liLastPage = "";
+			}else{
+				$lastPosPage = 10;
+				$liLastPage = $lastPage;
+			}
 		}elseif ($curPages > 5 && $curPages < $almostLast) {
 			$liFirstPage = $firstPage;
 			$firstPosPage = $curPages-4;

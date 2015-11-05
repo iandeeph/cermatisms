@@ -211,9 +211,11 @@ while($mergerow = mysql_fetch_array($mergequery)){
 	?>
 	</a>
 	<?php
-	}
+}
 	?>
 </div>
+
+<!-- PAGINATION START -->
 <div class="col s12">
 		<div class="center">
 			<ul class="pagination">
@@ -228,8 +230,13 @@ while($mergerow = mysql_fetch_array($mergequery)){
 		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
-			$lastPosPage = 10;
-			$liLastPage = $lastPage;
+			if($totPages < 10){
+				$lastPosPage = $totPages;
+				$liLastPage = "";
+			}else{
+				$lastPosPage = 10;
+				$liLastPage = $lastPage;
+			}
 		}elseif ($curPages > 5 && $curPages <= $almostLast) {
 			$liFirstPage = $firstPage;
 			$firstPosPage = $curPages-4;
@@ -260,4 +267,5 @@ while($mergerow = mysql_fetch_array($mergequery)){
 			</ul>
 		</div>
 	</div>
+<!-- PAGINATION ENDS -->
 <!-- end -->

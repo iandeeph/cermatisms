@@ -184,8 +184,13 @@
 		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
-			$lastPosPage = 10;
-			$liLastPage = $lastPage;
+			if($totPages < 10){
+				$lastPosPage = $totPages;
+				$liLastPage = "";
+			}else{
+				$lastPosPage = 10;
+				$liLastPage = $lastPage;
+			}
 		}elseif ($curPages > 5 && $curPages < $almostLast) {
 			$liFirstPage = $firstPage;
 			$firstPosPage = $curPages-4;

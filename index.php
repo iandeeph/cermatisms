@@ -75,6 +75,9 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
             <li class="bold <?php if ($getMenu == 'sentitem'){echo 'active';} ?>">
             	<a href="index.php?menu=sentitem&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Sent Item</a>
             </li>
+            <li class="bold <?php if ($getMenu == 'pending'){echo 'active';} ?>">
+                <a href="index.php?menu=pending&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Pending Item</a>
+            </li>
             <li class="bold <?php if ($getMenu == 'thread'){echo 'active';} ?>">
                 <a href="index.php?menu=thread&lastID=<?php echo $lastIdMsg;?>" class="waves-effect waves-teal">Thread</a>
             </li>
@@ -121,6 +124,11 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 							include "sentitem.php";
 						//<!-- Inbox End  -->
 						break;
+                    case 'pending':
+                        // <!-- Inbox Start  -->
+                            include "pending.php";
+                        //<!-- Inbox End  -->
+                        break;
                     case 'thread':
                         // <!-- thread Start  -->
                             include "thread.php";
