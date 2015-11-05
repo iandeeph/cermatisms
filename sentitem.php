@@ -166,20 +166,33 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 			<ul class="pagination">
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
-		if($curPages > 4){
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
-			$firstPosPage = $curPages-4;
-			if($curPages == $totPages){
-				$lastPosPage = $totPages;
-			}else{
-				$lastPosPage = $curPages+4;
-			}
-		} else {
+		$almostLast = $totPages-4;
+		$firstPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
+		$lastPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$totPages."&lastID=".$lastIdMsg."'> ... ".$totPages."</a></li>";
+
+		if($curPages <= 0 || $curPages > $totPages){
+			header('Location: ./?menu=sentitem&pages=1&lastID='.$lastIdMsg);
+		}elseif ($curPages >= 1 && $curPages < 5) {
+			$liFirstPage = "";
 			$firstPosPage = 1;
 			$lastPosPage = 10;
+			$liLastPage = $lastPage;
+		}elseif ($curPages > 4 && $curPages < $almostLast) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $curPages-4;
+			$lastPosPage = $curPages+4;
+			$liLastPage = $lastPage;
+		}elseif ($curPages >= $almostLast && $curPages <= $totPages) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $totPages-9;
+			$lastPosPage = $totPages;
+			$liLastPage = "";
+		}else{
+			header('Location: ./?menu=sentitem&pages=1&lastID='.$lastIdMsg);
 		}
-
 		
+		echo $liFirstPage;
+
 		for ($j=$firstPosPage; $j <= $lastPosPage; $j++) {
 			if ($curPages == $j) {
 				$active = 'active';
@@ -187,7 +200,7 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
 
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$totPages."'> ... ".$totPages."</a></li>";
+		echo $liLastPage;
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
 			  </ul>

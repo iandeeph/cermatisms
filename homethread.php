@@ -219,20 +219,33 @@ while($mergerow = mysql_fetch_array($mergequery)){
 			<ul class="pagination">
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
-		if($curPages > 4){
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=thread&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
-			$firstPosPage = $curPages-4;
-			if($curPages == $totPages){
-				$lastPosPage = $totPages;
-			}else{
-				$lastPosPage = $curPages+4;
-			}
-		} else {
+		$almostLast = $totPages-4;
+		$firstPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=thread&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
+		$lastPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=thread&pages=".$totPages."&lastID=".$lastIdMsg."'> ... ".$totPages."</a></li>";
+
+		if($curPages <= 0 || $curPages > $totPages){
+			header('Location: ./?menu=thread&pages=1&lastID='.$lastIdMsg);
+		}elseif ($curPages >= 1 && $curPages < 5) {
+			$liFirstPage = "";
 			$firstPosPage = 1;
 			$lastPosPage = 10;
+			$liLastPage = $lastPage;
+		}elseif ($curPages > 4 && $curPages < $almostLast) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $curPages-4;
+			$lastPosPage = $curPages+4;
+			$liLastPage = $lastPage;
+		}elseif ($curPages >= $almostLast && $curPages <= $totPages) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $totPages-9;
+			$lastPosPage = $totPages;
+			$liLastPage = "";
+		}else{
+			header('Location: ./?menu=thread&pages=1&lastID='.$lastIdMsg);
 		}
-
 		
+		echo $liFirstPage;
+
 		for ($j=$firstPosPage; $j <= $lastPosPage; $j++) {
 			if ($curPages == $j) {
 				$active = 'active';
@@ -240,7 +253,8 @@ while($mergerow = mysql_fetch_array($mergequery)){
 			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=thread&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
 
-			echo "<li><a href='".$_SERVER['PHP_SELF']."?menu=thread&pages=".$totPages."'> ... ".$totPages."</a></li>";
+		echo $liLastPage;
+
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
 			</ul>
