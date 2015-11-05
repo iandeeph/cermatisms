@@ -225,7 +225,7 @@ while($mergerow = mysql_fetch_array($mergequery)){
 
 		if($curPages <= 0 || $curPages > $totPages){
 			header('Location: ./?menu=thread&pages=1&lastID='.$lastIdMsg);
-		}elseif ($curPages >= 1 && $curPages < 5) {
+		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
 			$lastPosPage = 10;
