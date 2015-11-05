@@ -67,7 +67,7 @@ if(isset($_POST['phoneNumber'])) {
             $inserttooutbox1 = "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) 
               VALUES ('".$number."', '".$postMsg."', '".$user."')";
             $logging1 = "INSERT INTO log (user, action, date, messageID, phone, hal, message) 
-              VALUES ('".$user."', 'Sending Message', now(), '".$newID."', '".$number."', '".$postcase."', '".$postMsg."')";
+              VALUES ('".$user."', 'Sending Message (Blasting)', now(), '".$newID."', '".$number."', '".$postcase."', '".$postMsg."')";
             $inserttocustomer1 = "INSERT INTO customer (phone, hal, smsID) 
               VALUES ('".$number."', '".$postcase."', '".$newID."')";
 
@@ -103,7 +103,7 @@ if(isset($_POST['phoneNumber'])) {
               $inserttooutbox = "INSERT INTO outbox (DestinationNumber, UDH, TextDecoded, ID, MultiPart, CreatorID, Class)
                 VALUES ('".$number."', '".$udh."', '".$msg."', '".$newID."', 'true', '".$user."', '-1')";
               $logging = "INSERT INTO log (user, action, date, messageID, phone, hal, message) 
-                VALUES ('".$user."', 'Sending Multiple Message', now(), '".$newID."', '".$number."',  '".$postcase."', '".$postMsg."')";
+                VALUES ('".$user."', 'Sending Multiple Message (Blasting)', now(), '".$newID."', '".$number."',  '".$postcase."', '".$postMsg."')";
               $inserttocustomer = "INSERT INTO customer (phone, hal, smsID) 
                 VALUES ('".$number."', '".$postcase."', '".$newID."')";
 
