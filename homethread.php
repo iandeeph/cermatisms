@@ -230,7 +230,7 @@ while($mergerow = mysql_fetch_array($mergequery)){
 			$firstPosPage = 1;
 			$lastPosPage = 10;
 			$liLastPage = $lastPage;
-		}elseif ($curPages > 4 && $curPages < $almostLast) {
+		}elseif ($curPages > 5 && $curPages <= $almostLast) {
 			$liFirstPage = $firstPage;
 			$firstPosPage = $curPages-4;
 			$lastPosPage = $curPages+4;
@@ -243,7 +243,7 @@ while($mergerow = mysql_fetch_array($mergequery)){
 		}else{
 			header('Location: ./?menu=thread&pages=1&lastID='.$lastIdMsg);
 		}
-		
+
 		echo $liFirstPage;
 
 		for ($j=$firstPosPage; $j <= $lastPosPage; $j++) {

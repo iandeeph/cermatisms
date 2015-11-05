@@ -172,12 +172,12 @@ style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-t
 
 		if($curPages <= 0 || $curPages > $totPages){
 			header('Location: ./?menu=sentitem&pages=1&lastID='.$lastIdMsg);
-		}elseif ($curPages >= 1 && $curPages < 5) {
+		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
 			$lastPosPage = 10;
 			$liLastPage = $lastPage;
-		}elseif ($curPages > 4 && $curPages < $almostLast) {
+		}elseif ($curPages > 5 && $curPages < $almostLast) {
 			$liFirstPage = $firstPage;
 			$firstPosPage = $curPages-4;
 			$lastPosPage = $curPages+4;
