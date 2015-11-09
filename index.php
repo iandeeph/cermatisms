@@ -283,6 +283,10 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                 window.document.location = $(this).data("href");
             });
         });
+
+        $(document).ready(function() {
+            $('select').material_select();
+        });
     </script>
   </body>
 </html>

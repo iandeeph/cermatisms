@@ -77,6 +77,65 @@ if($totCont == 0) {
 	<div class="col s12">
 		<a class='<?php echo $fontColor;?>-text' href='./?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
 	</div>
+	<!-- FILTERING -->
+    <div class="col s12">
+		<ul class="collapsible" data-collapsible="accordion">
+			<li>
+				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
+				<div class="col s12 collapsible-body" style="margin-top:30px;">
+					<form action="" method="POST">
+						<div class="col s3">
+							<label class="active" for="datefrom">Date From</label>
+							<input id="datefrom" type="date" class="datepicker">
+						</div>
+						<div class="col s3">
+							<label class="active" for="dateto">Date To</label>
+							<input id="dateto" type="date" class="datepicker">
+						</div>
+						<div class="input-field col s3" style="margin-bottom:5px">
+							<select>
+								<option value="" disabled selected>Status</option>
+								<option value="1">Sent</option>
+								<option value="2">Failed</option>
+							</select>
+							<label>Select Status</label>
+						</div>
+						<div class="input-field col s3" style="margin-bottom:5px">
+							<select>
+								<option value="" disabled selected>Author</option>
+							<?php
+								$numUser = 1;
+								$qryUser = mysql_query("SELECT username FROM user");
+								while($rowUser = mysql_fetch_array($qryUser)){
+									echo "<option value=".$numUser.">".$rowUser['username']."</option>";
+									$numUser++;
+								}
+							?>
+							</select>
+							<label>Select Author</label>
+						</div>
+						<div class="col s6">
+							<label class="active" for="receipent">Receipents</label>
+							<input placeholder="Name/Phone number.. (Leave blank for any number..)" id ="receipent" type="text" class="validate">							
+						</div>
+						<div class="col s6">
+							<label class="active" for="case">Cust Case</label>
+							<input id ="case" type="text" class="validate">							
+						</div>
+						<div class="col s12">
+							<label class="active" for="message">Message</label>
+							<input id ="message" type="text" class="validate">							
+						</div>
+						<div class="col s12" style="margin-bottom:15px">
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</a>
+						</div>
+					</form>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<!-- FILTERING END -->
 	<div class="col s12">
 		<table class="striped">
 			<thead>

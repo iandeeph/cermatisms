@@ -55,6 +55,69 @@ $logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number
 	<div class="col s4">
       <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" href="javascript:history.go(0)" style="margin-top:30px"><i class="material-icons">replay</i></a>
     </div>
+
+	<!-- FILTERING -->
+    <div class="col s12">
+		<ul class="collapsible" data-collapsible="accordion">
+			<li>
+				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
+				<div class="col s12 collapsible-body" style="margin-top:30px;">
+					<form action="" method="POST">
+						<div class="col s3">
+							<label class="active" for="datefrom">Date From</label>
+							<input id="datefrom" type="date" class="datepicker">
+						</div>
+						<div class="col s3">
+							<label class="active" for="dateto">Date To</label>
+							<input id="dateto" type="date" class="datepicker">
+						</div>
+						<div class="input-field col s3" style="margin-bottom:5px">
+							<select>
+								<option value="" disabled selected>Action</option>
+								<option value="1">Sending</option>
+								<option value="2">Sending Multiple SMS</option>
+								<option value="3">Sending Blasting SMS</option>
+								<option value="4">Delete Message</option>
+								<option value="5">Inbox Simulation</option>
+							</select>
+							<label>Select Action</label>
+						</div>
+						<div class="input-field col s3" style="margin-bottom:5px">
+							<select>
+								<option value="" disabled selected>User</option>
+							<?php
+								$numUser = 1;
+								$qryUser = mysql_query("SELECT username FROM user");
+								while($rowUser = mysql_fetch_array($qryUser)){
+									echo "<option value=".$numUser.">".$rowUser['username']."</option>";
+									$numUser++;
+								}
+							?>
+							</select>
+							<label>Select User</label>
+						</div>
+						<div class="col s6">
+							<label class="active" for="receipent">Receipents</label>
+							<input placeholder="Name/Phone number.. (Leave blank for any number..)" id ="receipent" type="text" class="validate">							
+						</div>
+						<div class="col s6">
+							<label class="active" for="case">Case</label>
+							<input id ="case" type="text" class="validate">							
+						</div>
+						<div class="col s12">
+							<label class="active" for="message">Message</label>
+							<input id ="message" type="text" class="validate">							
+						</div>
+						<div class="col s12" style="margin-bottom:15px">
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</a>
+						</div>
+					</form>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<!-- FILTERING END -->
 	<div class="col s12">
 		<table class="striped">
 			<thead>

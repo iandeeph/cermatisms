@@ -1,3 +1,43 @@
+<!-- FILTERING -->
+<div class="col s12">
+	<ul class="collapsible" data-collapsible="accordion">
+		<li>
+			<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
+			<div class="col s12 collapsible-body" style="margin-top:30px;">
+				<form action="" method="POST">
+					<div class="col s3">
+						<label class="active" for="datefrom">Date From</label>
+						<input id="datefrom" type="date" class="datepicker">
+					</div>
+					<div class="col s3">
+						<label class="active" for="dateto">Date To</label>
+						<input id="dateto" type="date" class="datepicker">
+					</div>
+					<div class="col s3">
+						<label class="active" for="sender">Sender</label>
+						<input placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">							
+					</div>
+					<div class="input-field col s3" style="margin-bottom:5px">
+							<select>
+								<option value="" disabled selected>Status</option>
+								<option value="1">Read</option>
+								<option value="2">Unread</option>
+							</select>
+							<label>Select Status</label>
+						</div>
+					<div class="col s12">
+						<label class="active" for="case">Cust Case</label>
+						<input id ="case" type="text" class="validate">							
+					</div>
+					<div class="col s12" style="margin-bottom:15px">
+						<a class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
+						<a class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</a>
+					</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- FILTERING END -->
 <?php
 $userpriv = $_SESSION['priv'];
 if(!isset($_GET['pages'])){

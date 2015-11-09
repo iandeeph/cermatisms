@@ -54,7 +54,7 @@
 	<div class="col s7" style="margin-top:30px">
 		<a class="btn-floating btn-large waves-effect waves-light blue lighten-2 right" href="javascript:history.go(0)"><i class="material-icons">replay</i></a>
     </div>
-    <!-- FILTERING
+    <!-- FILTERING -->
     <div class="col s12">
 		<ul class="collapsible" data-collapsible="accordion">
 			<li>
@@ -70,18 +70,26 @@
 							<input id="dateto" type="date" class="datepicker">
 						</div>
 						<div class="col s3">
-							<label class="active" for="sender">sender</label>
-							<input placeholder="name/phone number" id ="sender" type="text" class="validate">							
+							<label class="active" for="sender">Sender</label>
+							<input placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">							
 						</div>
 						<div class="col s3">
+							<label class="active" for="case">Cust Case</label>
+							<input id ="case" type="text" class="validate">							
+						</div>
+						<div class="col s12">
+							<label class="active" for="message">Message</label>
+							<input id ="message" type="text" class="validate">							
+						</div>
+						<div class="col s12" style="margin-bottom:15px">
+							<a class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
 							<a class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</a>
 						</div>
-					</form>
 				</div>
 			</li>
 		</ul>
 	</div>
-	-->
+	<!-- FILTERING END -->
 	<div class="col s12">
 		<table class="striped">
 			<thead>
