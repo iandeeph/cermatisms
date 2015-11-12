@@ -1,13 +1,10 @@
 <?php
-$logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number, DATE_FORMAT(date, '%e %b %Y  %k:%i') as time FROM log ORDER BY date DESC";
-
 	if(!isset($_GET['pages'])){
 		$_GET['pages'] = 1;
 	}
-
 	$perPages = 13;
-	$getSentitems = mysql_query("SELECT * FROM log");
-	$totCont = mysql_num_rows($getSentitems);
+	$getInbox = mysql_query("SELECT * FROM inbox");
+	$totCont = mysql_num_rows($getInbox);
 	$totPages = ceil($totCont/$perPages);
 
 	//pagination code
@@ -38,12 +35,14 @@ $logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number
 	}else{$dissright="";}
 
 	if ($curPages > 1) {
-		$prevPage = $_SERVER['PHP_SELF']."?menu=logreport&pages=".$prevCurPage = $_GET['pages'] - 1;
+		$prevCurPages = $curPages-1;
+		$prevPage = $_SERVER['PHP_SELF']."?menu=logreport&pages=".$prevCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$prevPage = '';
 	}
 	if ($curPages < $tpages) {
-		$nextPage = $_SERVER['PHP_SELF']."?menu=logreport&pages=".$nextCurPage = $_GET['pages'] + 1;
+		$nextCurPages = $curPages+1;
+		$nextPage = $_SERVER['PHP_SELF']."?menu=logreport&pages=".$nextCurPages."&lastID=".$lastIdMsg;
 	}else{
 		$nextPage = '';
 	}
@@ -135,6 +134,7 @@ $logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number
 			</thead>
 			<tbody>
 				<?php
+				$logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number, DATE_FORMAT(date, '%e %b %Y  %k:%i') as time FROM log ORDER BY date DESC LIMIT ".$perPages." OFFSET ".$start."";
 				$takelog = mysql_query($logquery);
 		    	if($takelog && mysql_num_rows($takelog) > 0){
 			    	while ($log = mysql_fetch_array($takelog)){
@@ -186,20 +186,56 @@ $logquery = "SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number
 			<tbody>
 		</table>
 	</div>
-	<div class="container">
-		<div class="col s12">
+	
+	<div class="col s12">
+		<div class="center">
 			<ul class="pagination">
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
-		for ($j=1; $j <= $tpages; $j++) {
+		$almostLast = $totPages-4;
+		$firstPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=logreport&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
+		$lastPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=logreport&pages=".$totPages."&lastID=".$lastIdMsg."'> ... ".$totPages."</a></li>";
+
+		if($curPages <= 0 || $curPages > $totPages){
+			header('Location: ./?menu=logreport&pages=1&lastID='.$lastIdMsg);
+		}elseif ($curPages >= 1 && $curPages <= 5) {
+			$liFirstPage = "";
+			$firstPosPage = 1;
+			if($totPages < 10){
+				$lastPosPage = $totPages;
+				$liLastPage = "";
+			}else{
+				$lastPosPage = 10;
+				$liLastPage = $lastPage;
+			}
+		}elseif ($curPages > 5 && $curPages < $almostLast) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $curPages-4;
+			$lastPosPage = $curPages+4;
+			$liLastPage = $lastPage;
+		}elseif ($curPages >= $almostLast && $curPages <= $totPages) {
+			$liFirstPage = $firstPage;
+			$firstPosPage = $totPages-9;
+			$lastPosPage = $totPages;
+			$liLastPage = "";
+		}else{
+			header('Location: ./?menu=logreport&pages=1&lastID='.$lastIdMsg);
+		}
+		
+		echo $liFirstPage;
+
+		for ($j=$firstPosPage; $j <= $lastPosPage; $j++) {
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
-			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=logreport&pages=".$j."'>".$j."</a></li>";
+			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=logreport&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
+
+		echo $liLastPage;
+
 		?>
 				<li class="waves-effect <?php echo $dissright; ?>"><a href="<?php echo $nextPage; ?>" class="<?php echo $dissright; ?>"><i class="material-icons">chevron_right</i></a></li>
-			  </ul>
+			</ul>
 		</div>
 	</div>
 </div>

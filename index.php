@@ -8,6 +8,62 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
     $queryLastId = mysql_query("SELECT max(ID) as lastId FROM inbox");
     $resultLastId = mysql_fetch_array($queryLastId);
     $lastIdMsg = $resultLastId['lastId'];
+
+    function ifSubmitFilter(){
+        $qryOldestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime ASC LIMIT 1");
+        $rowOldestDate = mysql_fetch_array($qryOldestDate);
+        $oldestDate = $rowOldestDate['ReceivingDateTime'];
+
+        $qryNewestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime DESC LIMIT 1");
+        $rowNewestDate = mysql_fetch_array($qryNewestDate);
+        $newestDate = $rowNewestDate['ReceivingDateTime'];
+        if(isset($_POST['filterInboxSumbit'])){
+
+            $postDateFrom = (!empty($_POST['datefrom'])) ? $_POST['datefrom'] : $oldestDate;
+            $postDateTo   = (!empty($_POST['dateto'])) ? $_POST['dateto'] : $newestDate;
+
+            $dateFrom = date_create($postDateFrom);
+            $dateTo = date_create($postDateTo);
+            $from = date_format($dateFrom, 'Y-m-d 00:00:00');
+            $to = date_format($dateTo, 'Y-m-d 23:59:59');
+
+            $dateFilter = "(ReceivingDateTime BETWEEN '".$from."' AND '".$to."')";
+
+            $labelDateFilter = "Filter Date From : <b>".date_format($dateFrom, 'j F Y')."</b> to : <b>".date_format($dateTo, 'j F Y')."</b>";
+
+            if(!empty($_POST['sender'])){
+                $postSender = $_POST['sender'];
+                $qrySenderFilter = mysql_query("SELECT phone FROM customer WHERE phone LIKE '%".$postSender."%' or name LIKE '%".$postSender."%'");
+                $resultNumber = array();
+                echo "SENDER FILTER : SELECT phone FROM customer WHERE phone LIKE '%".$postSender."%' or name LIKE '%".$postSender."%'";
+                if(mysql_num_rows($qrySenderFilter)){
+                    while($rowSenderFilter = mysql_fetch_array($qrySenderFilter)){
+                        if (substr( $rowSenderFilter['phone'], 0, 1)  ===  "0") {
+                            $replaceSender = '+62'.substr($rowSenderFilter['phone'], 1);
+                        }
+                        $resultNumber[] = "SenderNumber='".$replaceSender."'";
+                    }
+                    $postNumberFilter = join(' OR ', $resultNumber);
+                }else{
+                    $postNumberFilter = "SenderNumber NOT LIKE '%'";
+                }
+                $labelSenderFilter = "Filter Name/Phone : <b>".$_POST['sender']."</b>";
+                $_COOKIE['labelSenderFilter']   = $labelSenderFilter;
+                $_COOKIE['postSender']          = $postSender;
+            }else{
+                $postNumberFilter = "SenderNumber LIKE '%'";
+            }
+            $numberFilter = $postNumberFilter;
+
+            $whereFilterArray = array($dateFilter, '('.$numberFilter.')');
+            $whereFilter = join(' AND ', $whereFilterArray);
+
+            $_COOKIE['labelDateFilter']     = $labelDateFilter;
+            $_COOKIE['whereFilter']         = $whereFilter;
+            $_COOKIE['postDateFrom']        = $dateFrom;
+            $_COOKIE['postDateTo']          = $dateTo;
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,7 +163,7 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
 		<div class="col s12">
 			<!-- page content  start-->
 			<?php
-				if(isset($_SESSION['logged'])) {		
+				if(isset($_SESSION['logged'])) {
 				switch ($menu) {
 					case 'sendsms':
 						// <!-- Send SMS Form Start  --> 
@@ -272,6 +328,8 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
                 selectYears: 15, // Creates a dropdown of 15 years to control year
                 closeOnSelect: true
             });
+
+            $('select').material_select();
         });
 
         $(document).ready(function(){
@@ -284,9 +342,9 @@ $menu = isset($_GET['menu'])?$_GET['menu']:'';
             });
         });
 
-        $(document).ready(function() {
-            $('select').material_select();
-        });
+        function resetField() {
+            document.getElementById("filterInbox").reset();
+        }
     </script>
   </body>
 </html>
