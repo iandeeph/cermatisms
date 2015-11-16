@@ -75,7 +75,7 @@ if($totCont == 0) {
 }
 ?>
 	<div class="col s12">
-		<a class='<?php echo $fontColor;?>-text' href='./?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
+		<a class='<?php echo $fontColor;?>-text' href='index.php?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
 	</div>
 	<!-- FILTERING -->
     <!-- <div class="col s12">

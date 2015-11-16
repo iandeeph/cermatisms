@@ -61,7 +61,7 @@ switch ($filter) {
 			<li>
 				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
 				<div class="col s12 collapsible-body" style="margin-top:30px;">
-					<form  id="filterInbox" action="./?menu=cekinbox&pages=1&filter=on&lastID=<?php echo $lastIdMsg; ?>" method="POST">
+					<form  id="filterInbox" action="index.php?menu=cekinbox&pages=1&filter=on&lastID=<?php echo $lastIdMsg; ?>" method="POST">
 						<div class="col s3">
 							<label  class="active" for="datefrom">Date From</label>
 							<input name="datefrom" id="datefrom" type="date" class="datepicker">
