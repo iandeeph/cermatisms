@@ -9,24 +9,34 @@ $newestDate = $rowNewestDate['ReceivingDateTime'];
 
 ifSubmitFilter();
 
-$whereFilter 		= $_COOKIE['whereFilter'];
-$labelDateFilter 	= $_COOKIE['labelDateFilter'];
-$datefrom 			= $_COOKIE['postDateFrom'];
-$dateTo 			= $_COOKIE['postDateTo'];
+if(isset($_SESSION['labelDateFilter'])){
+$labelDateFilter 	= $_SESSION['labelDateFilter'];
+$datefrom 			= $_SESSION['postDateFrom'];
+$dateTo 			= $_SESSION['postDateTo'];
+}
+$whereFilter 		= $_SESSION['whereFilter'];
 
-if(isset($_COOKIE['labelSenderFilter'])){
-	$labelSenderFilter 	= $_COOKIE['labelSenderFilter'];
-	$postSender 		= $_COOKIE['postSender'];
+if(isset($_SESSION['labelSenderFilter'])){
+	$labelSenderFilter 	= $_SESSION['labelSenderFilter'];
+	$postSender 		= $_SESSION['postSender'];
 }else{
 	$postSender			= "";
 }
 
-/**	if(isset($_POST['message'])){
-	$postMessage = $_POST['message'];
-	$caseMsg = "(hal LIKE '%".$postMessage."%')";
+if(isset($_SESSION['labelCaseFilter'])){
+	$labelCaseFilter 	= $_SESSION['labelCaseFilter'];
+	$postCase 			= $_SESSION['postCase'];
 }else{
-	$caseMsg = "";
-} **/
+	$postCase			= "";
+}
+
+if(isset($_SESSION['labelMsgFilter'])){
+	$labelMsgFilter 	= $_SESSION['labelMsgFilter'];
+	$postMessage 			= $_SESSION['postMessage'];
+}else{
+	$postMessage			= "";
+}
+
 $qryInbox = "SELECT *
 		FROM inbox
 		WHERE ".$whereFilter."";
@@ -102,16 +112,16 @@ echo "query content : ".$qryInbox;
 						</div>
 						<div class="col s3">
 							<label class="active" for="sender">Sender</label>
-							<input value="<?php echo $postSender;?>"name="sender" placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">
+							<input value="<?php echo $postSender;?>" name="sender" placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">
 							<input name="postSender" type="hidden" value="<?php echo $custid;?>">						
 						</div>
 						<div class="col s3">
-							<label class="active" for="case">Cust Case</label>
-							<input name="case"  id ="case" type="text" class="validate">							
+							<label class="active" for="caseFilter">Cust Case</label>
+							<input value="<?php echo $postCase;?>" name="caseFilter"  id ="caseFilter" type="text" class="validate">							
 						</div>
 						<div class="col s12">
-							<label class="active" for="message">Message</label>
-							<input name="message" id="message" type="text" class="validate">							
+							<label class="active" for="messageFilter">Message</label>
+							<input value="<?php echo $postMessage;?>" name="messageFilter" id="messageFilter" type="text" class="validate">							
 						</div>
 						<div class="col s12" style="margin-bottom:15px">
 							<a onclick="resetField()" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
@@ -134,13 +144,39 @@ echo "query content : ".$qryInbox;
 			</div>
 		</div>
 	<?php
-		if(isset($_COOKIE['labelSenderFilter'])){
+		if(isset($_SESSION['labelSenderFilter'])){
 	?>
 		<div class="col s4">
 			<div class="card-panel teal">
 				<span class="white-text">
 					<?php
 						echo $labelSenderFilter;
+					?>
+				</span>
+			</div>
+		</div>
+	<?php
+		}
+		if(isset($_SESSION['labelCaseFilter'])){
+	?>
+		<div class="col s4">
+			<div class="card-panel teal">
+				<span class="white-text">
+					<?php
+						echo $labelCaseFilter;
+					?>
+				</span>
+			</div>
+		</div>
+	<?php
+		}
+		if(isset($_SESSION['labelMsgFilter'])){
+	?>
+		<div class="col s4">
+			<div class="card-panel teal">
+				<span class="white-text">
+					<?php
+						echo $labelMsgFilter;
 					?>
 				</span>
 			</div>
@@ -198,12 +234,15 @@ echo "query content : ".$qryInbox;
 							}
 						$urlToThread = "index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg;
 				?>
-						<tr class="clickable-row" data-href="<?php echo $urlToThread;?>">
+						<tr>
 							<td style='word-wrap:break-word'>
 								<?php echo  $msg['date'];?>
+								<a href="<?php echo $urlToThread; ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">THREAD</a>
 							</td>
 							<td>
-								<?php echo $name ;?>
+								<?php echo $name;?></br>
+								<a href="https://crm.zoho.com/crm/GlobalSearch1.do?sModules=AllEntities&searchword=<?php echo $msg['number']; ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">CRM</a>
+								<a href="https://support.zoho.com/support/cermati/ShowHomePage.do#Cases/search/CurDep/<?php echo $msg['number']; ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">SUPPORT</a>
 							</td>
 							<td style='word-wrap:break-word'>
 								<?php echo $case ;?>

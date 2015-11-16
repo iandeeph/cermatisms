@@ -78,7 +78,7 @@ if($totCont == 0) {
 		<a class='<?php echo $fontColor;?>-text' href='./?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
 	</div>
 	<!-- FILTERING -->
-    <div class="col s12">
+    <!-- <div class="col s12">
 		<ul class="collapsible" data-collapsible="accordion">
 			<li>
 				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
@@ -134,7 +134,7 @@ if($totCont == 0) {
 				</div>
 			</li>
 		</ul>
-	</div>
+	</div> -->
 	<!-- FILTERING END -->
 	<div class="col s12">
 		<table class="striped">
@@ -217,20 +217,34 @@ if($totCont == 0) {
 									$nametodel = NULL;
 
 							}
-							echo "<tr class='clickable-row' data-href='index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg."'><td style='word-wrap:break-word'>".$msg['date']."</td><td>".$name."</td><td style='word-wrap:break-word'>".$case."</td><td 
-style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-text'>".$status."</td><td>".$msg['CreatorID']."</td>";
+							$urlToThread = "index.php?menu=thread&cat=detail&number=".$msg['number']."&lastID=".$lastIdMsg;
 							?>
-							<td style="vertical-align:middle;">
-								<form class="" method="POST" action="">
-									<input name="number" type="hidden" value="<?php echo $msg['number'];?>">
-									<input name="message" type="hidden" value="<?php echo $msg['TextDecoded'];?>">
-									<input name="name" type="hidden" value="<?php echo $nametodel;?>">
-									<input name="case" type="hidden" value="<?php echo $case;?>">
-									<input name="sentid" type="hidden" value="<?php echo $msg['ID'];?>">
-									<input name="customerid" type="hidden" value="<?php echo $custid;?>">
-						      		<button class="valign btn-floating btn-small waves-effect waves-light red lighten-2" type="submit" name="submit"><i class="material-icons">delete</i></button>
-						      	</form>
-						    </td></tr>
+							<tr>
+								<td style='word-wrap:break-word'>
+									<?php echo $msg['date']?>
+									<a href="<?php echo $urlToThread; ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">THREAD</a>
+								</td>
+								<td>
+									<?php echo $name; ?></br>
+									<a href="https://crm.zoho.com/crm/GlobalSearch1.do?sModules=AllEntities&searchword=<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">CRM</a>
+									<a href="https://support.zoho.com/support/cermati/ShowHomePage.do#Cases/search/CurDep/<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">SUPPORT</a>
+								</td>
+								<td style='word-wrap:break-word'><?php echo $case; ?></td>
+								<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; ?></td>
+								<td class='".$color."-text'><?php echo $status; ?></td>
+								<td><?php echo $msg['CreatorID']; ?></td>
+								<td style="vertical-align:middle;">
+									<form class="" method="POST" action="">
+										<input name="number" type="hidden" value="<?php echo $msg['number'];?>">
+										<input name="message" type="hidden" value="<?php echo $msg['TextDecoded'];?>">
+										<input name="name" type="hidden" value="<?php echo $nametodel;?>">
+										<input name="case" type="hidden" value="<?php echo $case;?>">
+										<input name="sentid" type="hidden" value="<?php echo $msg['ID'];?>">
+										<input name="customerid" type="hidden" value="<?php echo $custid;?>">
+							      		<button class="valign btn-floating btn-small waves-effect waves-light red lighten-2" type="submit" name="submit"><i class="material-icons">delete</i></button>
+							      	</form>
+							    </td>
+							</tr>
 						<?php
 					}
 				}

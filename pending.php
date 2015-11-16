@@ -118,9 +118,18 @@ if ($curPages < $tpages) {
 								$nametodel = NULL;
 
 						}
-								echo "<tr><td style='word-wrap:break-word'>".$msg['date']."</td><td>".$name."</td><td style='word-wrap:break-word'>".$case."</td><td 
-	style='word-wrap:break-word'>".$msg['TextDecoded']."</td><td class='".$color."-text'>".$status."</td><td>".$msg['CreatorID']."</td>";
-								?>
+							?>
+								<tr>
+									<td style='word-wrap:break-word'><?php echo $msg['date']; ?></td>
+									<td>
+										<?php echo $name; ?></br>
+										<a href="https://crm.zoho.com/crm/GlobalSearch1.do?sModules=AllEntities&searchword=<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">CRM</a>
+										<a href="https://support.zoho.com/support/cermati/ShowHomePage.do#Cases/search/CurDep/<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">SUPPORT</a>
+									</td>
+									<td style='word-wrap:break-word'><?php echo $case; ?></td>
+									<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; ?></td>
+									<td class='".$color."-text'><?php echo $status; ?></td>
+									<td><?php echo $msg['CreatorID']; ?></td>
 								</tr>
 							<?php
 						}
