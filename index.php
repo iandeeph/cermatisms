@@ -23,8 +23,8 @@ function ifSubmitFilter(){
         $postDateFrom   = (!empty($_POST['datefrom'])) ? $_POST['datefrom'] : $oldestDate;
         $postDateTo     = (!empty($_POST['dateto'])) ? $_POST['dateto'] : $newestDate;
 
-        $dateFrom       = DateTime($postDateFrom);
-        $dateTo         = DateTime($postDateTo);
+        $dateFrom       = new DateTime($postDateFrom);
+        $dateTo         = new DateTime($postDateTo);
         $from           = date_format($dateFrom, 'Y-m-d 00:00:00');
         $to             = date_format($dateTo, 'Y-m-d 23:59:59');
 
