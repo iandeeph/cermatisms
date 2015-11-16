@@ -79,7 +79,7 @@ $qryInbox = "SELECT ID,
 				TextDecoded
 				FROM inbox 
 				WHERE ".$whereFilter."
-				ORDER BY date DESC LIMIT ".$perPages." OFFSET ".$start." ";
+				ORDER BY ReceivingDateTime DESC LIMIT ".$perPages." OFFSET ".$start." ";
 
 $inboxItemPerPages = mysql_query($qryInbox);
 ?>
