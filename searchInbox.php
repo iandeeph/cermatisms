@@ -107,8 +107,7 @@ $inboxItemPerPages = mysql_query($qryInbox);
 						</div>
 						<div class="col s3">
 							<label class="active" for="sender">Sender</label>
-							<input value="<?php echo $postSender;?>" name="sender" placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">
-							<input name="postSender" type="hidden" value="<?php echo $custid;?>">						
+							<input value="<?php echo $postSender;?>" name="sender" placeholder="Name/Phone number.. (Leave blank for any number..)" id ="sender" type="text" class="validate">				
 						</div>
 						<div class="col s3">
 							<label class="active" for="caseFilter">Cust Case</label>
