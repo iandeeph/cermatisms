@@ -41,8 +41,6 @@ $qryInbox = "SELECT *
 		FROM inbox
 		WHERE ".$whereFilter."";
 
-echo "query pagination : ".$qryInbox."</br></br></br></br>";
-
 $getInbox = mysql_query($qryInbox);
 
 $totCont = mysql_num_rows($getInbox);
@@ -84,9 +82,6 @@ $qryInbox = "SELECT ID,
 				ORDER BY date DESC LIMIT ".$perPages." OFFSET ".$start." ";
 
 $inboxItemPerPages = mysql_query($qryInbox);
-	
-echo "query content : ".$qryInbox;
-
 ?>
 <div class="row">
 	<div class="col s5">

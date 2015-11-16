@@ -35,7 +35,6 @@ function ifSubmitFilter(){
         if(!empty($_POST['sender'])){
             $postSender = $_POST['sender'];
             $qrySenderFilter = mysql_query("SELECT phone FROM customer WHERE phone LIKE '%".$postSender."%' or name LIKE '%".$postSender."%'");
-            echo "SELECT phone FROM customer WHERE phone LIKE '%".$postSender."%' or name LIKE '%".$postSender."%'";
             $resultNumber = array();
             if(mysql_num_rows($qrySenderFilter)){
                 while($rowSenderFilter = mysql_fetch_array($qrySenderFilter)){
