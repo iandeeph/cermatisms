@@ -99,11 +99,11 @@ $inboxItemPerPages = mysql_query($qryInbox);
 					<form  id="filterInbox" action="" method="POST">
 						<div class="col s3">
 							<label  class="active" for="datefrom">Date From</label>
-							<input value="<?php echo date_format($datefrom, 'j F, Y');?>" name="datefrom" id="datefrom" type="date" class="datepicker">
+							<input value="<?php echo date('j F, Y', $datefrom);?>" name="datefrom" id="datefrom" type="date" class="datepicker">
 						</div>
 						<div class="col s3">
 							<label class="active" for="dateto">Date To</label>
-							<input value="<?php echo date_format($dateTo, 'j F, Y');?>" name="dateto" id="dateto" type="date" class="datepicker">
+							<input value="<?php echo date('j F, Y', $dateTo);?>" name="dateto" id="dateto" type="date" class="datepicker">
 						</div>
 						<div class="col s3">
 							<label class="active" for="sender">Sender</label>

@@ -23,9 +23,6 @@ function ifSubmitFilter(){
         $postDateFrom   = (!empty($_POST['datefrom'])) ? $_POST['datefrom'] : $oldestDate;
         $postDateTo     = (!empty($_POST['dateto'])) ? $_POST['dateto'] : $newestDate;
 
-        echo $_POST['datefrom'];
-        echo $_POST['dateto'];
-
 
         $dateFrom       = strtotime($postDateFrom);
         $dateTo         = strtotime($postDateTo);
