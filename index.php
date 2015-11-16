@@ -23,14 +23,18 @@ function ifSubmitFilter(){
         $postDateFrom   = (!empty($_POST['datefrom'])) ? $_POST['datefrom'] : $oldestDate;
         $postDateTo     = (!empty($_POST['dateto'])) ? $_POST['dateto'] : $newestDate;
 
-        $dateFrom       = new DateTime($postDateFrom);
-        $dateTo         = new DateTime($postDateTo);
-        $from           = date_format($dateFrom, 'Y-m-d 00:00:00');
-        $to             = date_format($dateTo, 'Y-m-d 23:59:59');
+        echo $_POST['datefrom'];
+        echo $_POST['dateto'];
+
+
+        $dateFrom       = strtotime($postDateFrom);
+        $dateTo         = strtotime($postDateTo);
+        $from           = date('Y-m-d 00:00:00', $dateFrom);
+        $to             = date('Y-m-d 23:59:59', $dateTo);
 
         $dateFilter = "(ReceivingDateTime BETWEEN '".$from."' AND '".$to."')";
 
-        $labelDateFilter = "Filter Date From : <b>".date_format($dateFrom, 'j F Y')."</b> to : <b>".date_format($dateTo, 'j F Y')."</b>";
+        $labelDateFilter = "Filter Date From : <b>".date('j F Y', $dateFrom)."</b> to : <b>".date('j F Y', $dateTo)."</b>";
 
     //---------------------->> Filtering By Sender
         if(!empty($_POST['sender'])){
