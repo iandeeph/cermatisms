@@ -54,7 +54,7 @@ if (isset($_POST['filePath']) && !empty($_POST['filePath'])) {
     }else{
       //Import uploaded file to Database
       $handle = fopen($_FILES['fileContent']['tmp_name'], "r");
-      while (($data = fgetcsv($handle, 1000, "," ,'|' )) !== FALSE) {
+      while (($data = fgetcsv($handle, 1000, "," ,'"' )) !== FALSE) {
         $name = $data[0];
         $number = $data[1];
         $postcase=$data[2];
