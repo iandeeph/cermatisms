@@ -35,7 +35,7 @@ if(!isset($_GET['pages'])){
 		$page=intval($_GET['pages']);
 		$tpages=$totPages;
 
-		ifSubmitFilter();
+		ifSubmitInboxFilter();
 ?>
 <div class="row">
 	<div class="col s5">
@@ -72,7 +72,7 @@ if(!isset($_GET['pages'])){
 							<input name="messageFilter" id ="messageFilter" type="text" class="validate">							
 						</div>
 						<div class="col s12" style="margin-bottom:15px">
-							<a onclick="resetField()" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
+							<a id="resetButton" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
 							<button class="waves-effect waves-light btn-large" name="filterInboxSumbit"><i class="material-icons right">send</i>Filter</button>
 						</div>
 					</form>

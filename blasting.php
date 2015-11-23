@@ -16,7 +16,7 @@ header ('Location : ./');
           <input class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Upload file contain phone numbers" type="file" name="fileContent">
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text" name="filePath">
+          <input placeholder="Upload CSV File, format : name, phone number, case, message..." class="file-path validate" type="text" name="filePath">
         </div>
       </div>
       <div class="col s12 center">

@@ -10,28 +10,39 @@ $queryLastId = mysql_query("SELECT max(ID) as lastId FROM inbox");
 $resultLastId = mysql_fetch_array($queryLastId);
 $lastIdMsg = $resultLastId['lastId'];
 
-function ifSubmitFilter(){
-    $qryOldestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime ASC LIMIT 1");
-    $rowOldestDate = mysql_fetch_array($qryOldestDate);
-    $oldestDate = $rowOldestDate['ReceivingDateTime'];
+function dateFilterFx($dtFrom, $dtTo, $fieldDate, $oldstDt, $nuDt){
+    $postDateFrom   = (!empty($dtFrom)) ? $dtFrom : $oldstDt;
+    $postDateTo     = (!empty($dtTo)) ? $dtTo : $nuDt;
 
-    $qryNewestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime DESC LIMIT 1");
-    $rowNewestDate = mysql_fetch_array($qryNewestDate);
-    $newestDate = $rowNewestDate['ReceivingDateTime'];
+
+    $dateFrom       = strtotime($postDateFrom);
+    $dateTo         = strtotime($postDateTo);
+    $from           = date('Y-m-d 00:00:00', $dateFrom);
+    $to             = date('Y-m-d 23:59:59', $dateTo);
+
+    $dateFilter = "(".$fieldDate." BETWEEN '".$from."' AND '".$to."')";
+
+    $labelDateFilter = "Filter Date From : <b>".date('j F Y', $dateFrom)."</b> to : <b>".date('j F Y', $dateTo)."</b>";
+
+    $_SESSION['labelDateFilter']     = $labelDateFilter;
+    $_SESSION['postDateFrom']        = $dateFrom;
+    $_SESSION['postDateTo']          = $dateTo;
+
+    return $dateFilter;
+}
+
+function ifSubmitInboxFilter(){
     if(isset($_POST['filterInboxSumbit'])){
     //---------------------->> Filtering By Date
-        $postDateFrom   = (!empty($_POST['datefrom'])) ? $_POST['datefrom'] : $oldestDate;
-        $postDateTo     = (!empty($_POST['dateto'])) ? $_POST['dateto'] : $newestDate;
+        $qryOldestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime ASC LIMIT 1");
+        $rowOldestDate = mysql_fetch_array($qryOldestDate);
+        $oldestDate = $rowOldestDate['ReceivingDateTime'];
 
+        $qryNewestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime DESC LIMIT 1");
+        $rowNewestDate = mysql_fetch_array($qryNewestDate);
+        $newestDate = $rowNewestDate['ReceivingDateTime'];
 
-        $dateFrom       = strtotime($postDateFrom);
-        $dateTo         = strtotime($postDateTo);
-        $from           = date('Y-m-d 00:00:00', $dateFrom);
-        $to             = date('Y-m-d 23:59:59', $dateTo);
-
-        $dateFilter = "(ReceivingDateTime BETWEEN '".$from."' AND '".$to."')";
-
-        $labelDateFilter = "Filter Date From : <b>".date('j F Y', $dateFrom)."</b> to : <b>".date('j F Y', $dateTo)."</b>";
+        $dateFilter = dateFilterFx($_POST['datefrom'], $_POST['dateto'], "ReceivingDateTime", $oldestDate, $newestDate);
 
     //---------------------->> Filtering By Sender
         if(!empty($_POST['sender'])){
@@ -99,14 +110,140 @@ function ifSubmitFilter(){
 
         }
         
-
         $whereFilterArray = array($dateFilter, '('.$numberFilter.')','('.$numberFilterByCase.')','('.$NumberFilterByMsg.')');
         $whereFilter = join(' AND ', $whereFilterArray);
 
-        $_SESSION['labelDateFilter']     = $labelDateFilter;
+
         $_SESSION['whereFilter']         = $whereFilter;
-        $_SESSION['postDateFrom']        = $dateFrom;
-        $_SESSION['postDateTo']          = $dateTo;
+    }
+}
+
+function ifSubmitSentFilter(){
+    if(isset($_POST['filterSentSumbit'])){
+    //---------------------->> Filtering By Date
+        $qryOldestDate = mysql_query("SELECT SendingDateTime FROM sentitems ORDER BY SendingDateTime ASC LIMIT 1");
+        $rowOldestDate = mysql_fetch_array($qryOldestDate);
+        $oldestDate = $rowOldestDate['SendingDateTime'];
+
+        $qryNewestDate = mysql_query("SELECT SendingDateTime FROM sentitems ORDER BY SendingDateTime DESC LIMIT 1");
+        $rowNewestDate = mysql_fetch_array($qryNewestDate);
+        $newestDate = $rowNewestDate['SendingDateTime'];
+
+        $dateFilter = dateFilterFx($_POST['datefrom'], $_POST['dateto'], "SendingDateTime", $oldestDate, $newestDate);
+
+    //---------------------->> Filtering By Sender
+        if(!empty($_POST['receipentSentFilter'])){
+            $postReceipent = $_POST['receipentSentFilter'];
+            $qryReceipentFilter = mysql_query("SELECT phone FROM customer WHERE phone LIKE '%".$postReceipent."%' or name LIKE '%".$postReceipent."%'");
+            $resultNumber = array();
+            if(mysql_num_rows($qryReceipentFilter)){
+                while($rowReceipentFilter = mysql_fetch_array($qryReceipentFilter)){
+                    $resultNumber[] = "DestinationNumber='".$rowReceipentFilter['phone']."'";
+                }
+                $postNumberFilterByReceipent = join(' OR ', $resultNumber);
+            }else{
+                $postNumberFilterByReceipent = "DestinationNumber NOT LIKE '%'";
+            }
+            $labelReceipentFilter               = "Filter Name/Phone : <b>".$_POST['receipentSentFilter']."</b>";
+            $_SESSION['labelReceipentFilter']   = $labelReceipentFilter;
+            $_SESSION['postReceipent']          = $postReceipent;
+        }else{
+            $postNumberFilterByReceipent           = "DestinationNumber LIKE '%'";
+            unset($_SESSION['labelReceipentFilter']);
+            unset($_SESSION['postReceipent']);
+        }
+        $numberFilter = $postNumberFilterByReceipent;
+
+    //---------------------->> Filtering By Case
+        if(!empty($_POST['caseSentFilter'])){
+            $postCase = $_POST['caseSentFilter'];
+            $qryCaseFilter = mysql_query("SELECT phone FROM customer WHERE hal LIKE '%".$postCase."%'");
+            $resultNumber2 = array();
+            if(mysql_num_rows($qryCaseFilter)){
+                while($rowCaseFilter = mysql_fetch_array($qryCaseFilter)){
+                    if (substr($rowCaseFilter['phone'], 0, 1)  ===  "0") {
+                        $replaceReceipent2 = '+62'.substr($rowCaseFilter['phone'], 1);
+                    }
+                    $resultNumber2[] = "DestinationNumber='".$replaceReceipent2."'";
+                }
+                $postNumberFilterByCase = join(' OR ', $resultNumber2);
+            }else{
+                $postNumberFilterByCase = "DestinationNumber NOT LIKE '%'";
+            }
+            $labelCaseFilter = "Filter Case : <b>".$_POST['caseSentFilter']."</b>";
+            $_SESSION['labelCaseFilterOfSent']   = $labelCaseFilter;
+            $_SESSION['postCaseOfSent']          = $postCase;
+        }else{
+            $postNumberFilterByCase = "DestinationNumber LIKE '%'";
+            unset($_SESSION['labelCaseFilterOfSent']);
+            unset( $_SESSION['postCaseOfSent']);
+        }
+        $numberFilterByCase = $postNumberFilterByCase;
+
+    //---------------------->> Filtering By Message
+        if(!empty($_POST['messageSentFilter'])){
+            $postMessage    = $_POST['messageSentFilter'];
+            $NumberFilterByMsg = "TextDecoded LIKE '%".$postMessage."%'";
+            $labelMsgFilter = "Filter Message : <b>".$_POST['messageSentFilter']."</b>";
+            $_SESSION['labelMsgFilterOfSent']   = $labelMsgFilter;
+            $_SESSION['postMessageOfSent']      = $postMessage;
+        }else{
+            $NumberFilterByMsg = "TextDecoded LIKE '%'";
+            unset($_SESSION['labelMsgFilterOfSent']);
+            unset( $_SESSION['postMessageOfSent']);
+
+        }
+
+    //---------------------->> Filtering By Status
+        if(!empty($_POST['statusSentFilter'])){
+            $postStatusSentFilter = $_POST['statusSentFilter'];
+            if($_POST['statusSentFilter'] == "Sent"){
+                $statusFilter = "Status LIKE 'SendingOK%'";
+                $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
+                $_SESSION['labelStatusFilter']   = $labelStatusFilter;
+                $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
+            }elseif($_POST['statusSentFilter'] == "Failed"){
+                $statusFilter = "Status = 'SendingError' OR Status = 'DeliveryFailed' OR Status = 'Error'";
+                $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
+                $_SESSION['labelStatusFilter']   = $labelStatusFilter;
+                $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
+            }elseif($_POST['statusSentFilter'] == "All"){
+                $statusFilter = "Status LIKE '%'";
+                $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
+                $_SESSION['labelStatusFilter']   = $labelStatusFilter;
+                $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
+            }
+        }else{
+            $statusFilter = "Status LIKE '%'";
+            unset($_SESSION['labelStatusFilter']);
+            unset($_SESSION['postStatusSentFilter']);
+        }
+
+    //---------------------->> Filtering By Author
+        if(!empty($_POST['authorSentFilter'])){
+            $postAuthorSentFilter = $_POST['authorSentFilter'];
+            if($postAuthorSentFilter == "All"){
+                $authorFilter = "CreatorID LIKE '%'";
+                $labelAuthorFilter = "Author Filter : <b>".$postAuthorSentFilter."</b>";
+                $_SESSION['labelAuthorFilter']   = $labelAuthorFilter;
+                $_SESSION['postAuthorSentFilter']= $postAuthorSentFilter;
+            }else{
+                $authorFilter = "CreatorID = '".$postAuthorSentFilter."'";
+                $labelAuthorFilter = "Author Filter : <b>".$postAuthorSentFilter."</b>";
+                $_SESSION['labelAuthorFilter']   = $labelAuthorFilter;
+                $_SESSION['postAuthorSentFilter']= $postAuthorSentFilter;
+            }
+        }else{
+            $authorFilter = "CreatorID LIKE '%'";
+            unset($_SESSION['labelAuthorFilter']);
+            unset($_SESSION['postAuthorSentFilter']);
+        }
+        
+        $whereFilterArray = array($dateFilter, '('.$numberFilter.')','('.$numberFilterByCase.')','('.$NumberFilterByMsg.')','('.$statusFilter.')','('.$authorFilter.')');
+        $whereFilter = join(' AND ', $whereFilterArray);
+
+
+        $_SESSION['whereFilterOfSent']         = $whereFilter;
     }
 }
 ?>
@@ -385,9 +522,18 @@ function ifSubmitFilter(){
 
         });
 
-        function resetField() {
-            document.getElementById("filterInbox").reset();
-        }
+        $("#resetButton").click(function(){
+            $("#datefrom").val("");
+            $("#dateto").val("");
+            $("#sender").val("");
+            $("#caseFilter").val("");
+            $("#messageFilter").val("");
+            $("#statusSentFilter").val("");
+            $("#authorSentFilter").val("");
+            $("#receipentSentFilter").val("");
+            $("#caseSentFilter").val("");
+            $("#messageSentFilter").val("");
+        });
     </script>
   </body>
 </html>

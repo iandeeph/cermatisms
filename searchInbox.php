@@ -1,20 +1,12 @@
 <?php
-$qryOldestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime ASC LIMIT 1");
-$rowOldestDate = mysql_fetch_array($qryOldestDate);
-$oldestDate = $rowOldestDate['ReceivingDateTime'];
-
-$qryNewestDate = mysql_query("SELECT ReceivingDateTime FROM inbox ORDER BY ReceivingDateTime DESC LIMIT 1");
-$rowNewestDate = mysql_fetch_array($qryNewestDate);
-$newestDate = $rowNewestDate['ReceivingDateTime'];
-
-ifSubmitFilter();
+ifSubmitInboxFilter();
 
 if(isset($_SESSION['labelDateFilter'])){
-$labelDateFilter 	= $_SESSION['labelDateFilter'];
-$datefrom 			= $_SESSION['postDateFrom'];
-$dateTo 			= $_SESSION['postDateTo'];
+	$labelDateFilter 	= $_SESSION['labelDateFilter'];
+	$datefrom 			= $_SESSION['postDateFrom'];
+	$dateTo 			= $_SESSION['postDateTo'];
 }
-$whereFilter 		= $_SESSION['whereFilter'];
+	$whereFilter 		= $_SESSION['whereFilter'];
 
 if(isset($_SESSION['labelSenderFilter'])){
 	$labelSenderFilter 	= $_SESSION['labelSenderFilter'];
@@ -32,9 +24,9 @@ if(isset($_SESSION['labelCaseFilter'])){
 
 if(isset($_SESSION['labelMsgFilter'])){
 	$labelMsgFilter 	= $_SESSION['labelMsgFilter'];
-	$postMessage 			= $_SESSION['postMessage'];
+	$postMessage 		= $_SESSION['postMessage'];
 }else{
-	$postMessage			= "";
+	$postMessage		= "";
 }
 
 $qryInbox = "SELECT *
@@ -118,7 +110,7 @@ $inboxItemPerPages = mysql_query($qryInbox);
 							<input value="<?php echo $postMessage;?>" name="messageFilter" id="messageFilter" type="text" class="validate">							
 						</div>
 						<div class="col s12" style="margin-bottom:15px">
-							<a onclick="resetField()" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
+							<a id="resetButton" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
 							<button class="waves-effect waves-light btn-large" name="filterInboxSumbit"><i class="material-icons right">send</i>Filter</button>
 						</div>
 					</form>
