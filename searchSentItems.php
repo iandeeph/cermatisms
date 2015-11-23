@@ -152,7 +152,7 @@ if($totCont == 0) {
 							<label class="active" for="dateto">Date To</label>
 							<input value="<?php echo date('j F, Y', $dateTo); ?>" name="dateto" id="dateto" type="date" class="datepicker">
 						</div>
-						<div class="input-field col s3" style="margin-bottom:5px">
+						<div class="input-field col s3" style="margin-bottom:20px">
 							<select name="statusSentFilter" id="statusSentFilter">
 								<option value="" disabled selected>Status</option>
 								<option <?php echo $allSelected; ?> value="All">All</option>
@@ -161,7 +161,7 @@ if($totCont == 0) {
 							</select>
 							<label>Select Status</label>
 						</div>
-						<div class="input-field col s3" style="margin-bottom:5px">
+						<div class="input-field col s3" style="margin-bottom:20px">
 							<select name="authorSentFilter" id="authorSentFilter">
 								<option value="" disabled selected>Author</option>
 								<option value="All">All</option>
