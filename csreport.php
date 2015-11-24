@@ -20,7 +20,7 @@ if(isset($_SESSION['labelDateFilter'])){
 
 	$whereFilter 		= $_SESSION['filterReport'];
 
-$qryReport = mysql_query("SELECT CreatorID as user,count(TextDecoded) as total FROM sentitems WHERE ".$whereFilter." GROUP BY CreatorID");
+$qryReport = mysql_query("SELECT CreatorID as user,count(TextDecoded) as total FROM sentitems WHERE ".$whereFilter." GROUP BY CreatorID ORDER BY CreatorID");
 ?>
 <div class="row">
 	<div class="col s8">
