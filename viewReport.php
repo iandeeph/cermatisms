@@ -2,13 +2,21 @@
 if(!isset($_GET['pages'])){
 	$_GET['pages'] = 1;
 }
-$userpriv = $_SESSION['priv'];
-$perPages = 13;
-if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
-$getSentitems = mysql_query("SELECT * FROM sentitems");
-}else{
-$getSentitems = mysql_query("SELECT * FROM sentitems WHERE CreatorID != 'admin'");
+
+if(isset($_SESSION['labelDateFilter'])){
+	$labelDateFilter 	= $_SESSION['labelDateFilter'];
+	$datefrom 			= $_SESSION['postDateFrom'];
+	$dateTo 			= $_SESSION['postDateTo'];
 }
+
+	$whereFilter 		= $_SESSION['filterReport'];
+
+$_SESSION['reportUser'] = $_GET['user'];
+$reportUser = $_SESSION['reportUser'];
+
+$perPages = 13;
+$getSentitems = mysql_query("SELECT * FROM sentitems WHERE ".$whereFilter."AND (CreatorID = '".$reportUser."')");
+
 $totCont = mysql_num_rows($getSentitems);
 $totPages = ceil($totCont/$perPages);
 
@@ -41,102 +49,46 @@ if($curPages >= $tpages){
 
 if ($curPages > 1) {
 	$prevCurPages = $curPages-1;
-	$prevPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$prevCurPages."&lastID=".$lastIdMsg;
+	$prevPage = $_SERVER['PHP_SELF']."?menu=report&view=on&pages=".$prevCurPages."&user=".$reportUser."&lastID=".$lastIdMsg;
 }else{
 	$prevPage = '';
 }
 if ($curPages < $tpages) {
 	$nextCurPages = $curPages+1;
-	$nextPage = $_SERVER['PHP_SELF']."?menu=sentitem&pages=".$nextCurPages."&lastID=".$lastIdMsg;
+	$nextPage = $_SERVER['PHP_SELF']."?menu=report&view=on&pages=".$nextCurPages."&user=".$reportUser."&lastID=".$lastIdMsg;
 }else{
 	$nextPage = '';
 }
-ifSubmitSentFilter($oldestDate, $newestDate);
 ?>
 <div class="row">
 	<div class="col s8">
-		<h3>Sent Items</h3>
+		<h3>Sent Items Report</h3>
 	</div>
 	<div class="col s4">
       <a class="btn-floating btn-large waves-effect waves-light blue blue lighten-2 right" href="javascript:history.go(0)" style="margin-top:30px"><i class="material-icons">replay</i></a>
     </div>
-<?php
-if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
-$getPendingitems = mysql_query("SELECT * FROM outbox");
-}else{
-$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID != 'admin'");
-}
-
-$totCont = mysql_num_rows($getPendingitems);
-
-if($totCont == 0) {
-	$fontColor = 'green';
-}else{
-	$fontColor = 'red';
-}
-?>
-	<div class="col s12">
-		<a class='<?php echo $fontColor;?>-text' href='index.php?menu=pending&pages=1&lastID=<?php echo $lastIdMsg; ?>'>[ <?php echo $totCont;?> ] sms pending</a>
+</div>
+<div class="row">
+	<div class="col s4">
+		<div class="card-panel teal">
+			<span class="white-text">
+				<?php
+					echo $labelDateFilter;
+				?>
+			</span>
+		</div>
 	</div>
-	<!-- FILTERING -->
-    <div class="col s12">
-		<ul class="collapsible" data-collapsible="accordion">
-			<li>
-				<div class="collapsible-header"><i class="material-icons">search</i>Filter</div>
-				<div class="col s12 collapsible-body" style="margin-top:30px;">
-					<form action="index.php?menu=sentitem&pages=1&filter=on&lastID=<?php echo $lastIdMsg; ?>" method="POST" name="filterSentitems">
-						<div class="col s3">
-							<label class="active" for="datefrom">Date From</label>
-							<input name="datefrom" id="datefrom" type="date" class="datepicker">
-						</div>
-						<div class="col s3">
-							<label class="active" for="dateto">Date To</label>
-							<input name="dateto" id="dateto" type="date" class="datepicker">
-						</div>
-						<div class="input-field col s3" style="margin-bottom:20px">
-							<select name="statusSentFilter" id="statusSentFilter">
-								<option value="" disabled selected>Status</option>
-								<option value="All">All</option>
-								<option value="Sent">Sent</option>
-								<option value="Failed">Failed</option>
-							</select>
-							<label>Select Status</label>
-						</div>
-						<div class="input-field col s3" style="margin-bottom:20px">
-							<select name="authorSentFilter" id="authorSentFilter">
-								<option value="" disabled selected>Author</option>
-								<option value="All">All</option>
-							<?php
-								$qryUser = mysql_query("SELECT username FROM user");
-								while($rowUser = mysql_fetch_array($qryUser)){
-									echo "<option value=".$rowUser['username'].">".$rowUser['username']."</option>";
-								}
-							?>
-							</select>
-							<label>Select Author</label>
-						</div>
-						<div class="col s6">
-							<label class="active" for="receipentSentFilter">Receipents</label>
-							<input name="receipentSentFilter" placeholder="Name/Phone number.. (Leave blank for any number..)" id ="receipentSentFilter" type="text" class="validate">							
-						</div>
-						<div class="col s6">
-							<label class="active" for="caseSentFilter">Cust Case</label>
-							<input name="caseSentFilter" id ="caseSentFilter" type="text" class="validate">							
-						</div>
-						<div class="col s12">
-							<label class="active" for="messageSentFilter">Message</label>
-							<input name="messageSentFilter" id ="messageSentFilter" type="text" class="validate">							
-						</div>
-						<div class="col s12" style="margin-bottom:15px">
-							<a id="resetButton" class="waves-effect waves-light btn-large"><i class="material-icons right">clear</i>Clear</a>
-							<button name="filterSentSumbit" class="waves-effect waves-light btn-large"><i class="material-icons right">send</i>Filter</button>
-						</div>
-					</form>
-				</div>
-			</li>
-		</ul>
+	<div class="col s4">
+		<div class="card-panel teal">
+			<span class="white-text">
+				<?php
+					echo "Author Filter : <b>".$reportUser."</b>";;
+				?>
+			</span>
+		</div>
 	</div>
-	<!-- FILTERING END -->
+</div>
+<div class="row">
 	<div class="col s12">
 		<table class="striped">
 			<thead>
@@ -169,26 +121,15 @@ if($totCont == 0) {
 				    	echo "Error: ".mysql_error($conn);
 				    }
 				}
-					if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 					$sentItemPerPages = mysql_query("SELECT *,
 										replace(replace(DestinationNumber,'+62','0'), '+628', '08') as number, 
 										DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
 										CreatorID
 										FROM sentitems
+										WHERE ".$whereFilter."AND (CreatorID = '".$reportUser."')
 										ORDER BY SendingDateTime 
 										DESC LIMIT ".$perPages." 
 										OFFSET ".$start." ");
-					} else {
-						$sentItemPerPages = mysql_query("SELECT *,
-										replace(replace(DestinationNumber,'+62','0'), '+628', '08') as number, 
-										DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
-										CreatorID
-										FROM sentitems 
-										WHERE CreatorID != 'admin' 
-										ORDER BY SendingDateTime 
-										DESC LIMIT ".$perPages." 
-										OFFSET ".$start." ");
-					}
 
 					if($sentItemPerPages && mysql_num_rows($sentItemPerPages) > 0 && isset($_SESSION['priv'])) {
 						while($msg = mysql_fetch_array($sentItemPerPages)) {
@@ -259,11 +200,11 @@ if($totCont == 0) {
 				<li class="waves-effect <?php echo $dissleft; ?>" <?php echo $dissleft; ?>><a href="<?php echo $prevPage; ?>" class="<?php echo $dissleft; ?>"><i class="material-icons">chevron_left</i></a></li>
 		<?php
 		$almostLast = $totPages-4;
-		$firstPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=1&lastID=".$lastIdMsg."'>1 ... </a></li>";
-		$lastPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$totPages."&lastID=".$lastIdMsg."'> ... ".$totPages."</a></li>";
+		$firstPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=report&view=on&pages=1&user=".$reportUser."&lastID=".$lastIdMsg."'>1 ... </a></li>";
+		$lastPage = "<li><a href='".$_SERVER['PHP_SELF']."?menu=report&view=on&pages=".$totPages."&user=".$reportUser."&lastID=".$lastIdMsg."'> ... ".$totPages."</a></li>";
 
 		if($curPages <= 0 || $curPages > $totPages){
-			header('Location: ./?menu=sentitem&pages=1&lastID='.$lastIdMsg);
+			header('Location: ./?menu=report&view=on&pages=1&user=".$reportUser."&lastID='.$lastIdMsg);
 		}elseif ($curPages >= 1 && $curPages <= 5) {
 			$liFirstPage = "";
 			$firstPosPage = 1;
@@ -285,7 +226,7 @@ if($totCont == 0) {
 			$lastPosPage = $totPages;
 			$liLastPage = "";
 		}else{
-			header('Location: ./?menu=sentitem&pages=1&lastID='.$lastIdMsg);
+			header('Location: ./?menu=report&view=on&pages=1&user=".$reportUser."&lastID='.$lastIdMsg);
 		}
 		
 		echo $liFirstPage;
@@ -294,7 +235,7 @@ if($totCont == 0) {
 			if ($curPages == $j) {
 				$active = 'active';
 			}else{$active="";}
-			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=sentitem&pages=".$j."&lastID=".$lastIdMsg."'>".$j."</a></li>";
+			echo "<li class='".$active."'><a href='".$_SERVER['PHP_SELF']."?menu=report&view=on&pages=".$j."&user=".$reportUser."&lastID=".$lastIdMsg."'>".$j."</a></li>";
 		}
 
 		echo $liLastPage;

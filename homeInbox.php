@@ -35,7 +35,7 @@ if(!isset($_GET['pages'])){
 		$page=intval($_GET['pages']);
 		$tpages=$totPages;
 
-		ifSubmitInboxFilter();
+		ifSubmitInboxFilter($oldestDate, $newestDate);
 ?>
 <div class="row">
 	<div class="col s5">

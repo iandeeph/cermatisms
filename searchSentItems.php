@@ -1,5 +1,5 @@
 <?php
-ifSubmitSentFilter();
+ifSubmitSentFilter($oldestDate, $newestDate);
 
 if(isset($_SESSION['labelDateFilter'])){
 	$labelDateFilter 	= $_SESSION['labelDateFilter'];
