@@ -152,7 +152,7 @@ if(!isset($_GET['pages'])){
 							<td style='word-wrap:break-word'>
 								<?php echo $case;?>
 							</td>
-							<td style='word-wrap:break-word; widht:200px;'>
+							<td style='word-wrap:break-word;'>
 								<?php echo $msg['TextDecoded'];?>
 							</td>						
 							<td style="vertical-align:middle;">

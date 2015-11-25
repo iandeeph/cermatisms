@@ -240,8 +240,8 @@ while($mergerow = mysql_fetch_array($mergequery)){
 	echo '<a href="index.php?menu=thread&cat=detail&number='.$mergerow['number'].'&lastID='.$lastIdMsg.'" class="collection-item new">';
 	?>
 	<span style="display:inline-block; width:150px"><?php echo $mergerow['date'];?></span>
-	<span style="display:inline-block; width:350px"><?php echo $name;?></span>
-	<span style="display:inline-block; width:700px"><?php echo $case;?></span>
+	<span style="display:inline-block; width:300px"><?php echo $name;?></span>
+	<span style="display:inline-block;"><?php echo $case;?></span>
 	<?php
 		if($rowNewSMS['newSMS'] == 0){
 			echo '<span class="badge">'.$mergerow['TotalSMS'].'</span>';			

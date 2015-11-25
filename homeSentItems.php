@@ -140,7 +140,7 @@ if($totCont == 0) {
 	<div class="col s12">
 		<table class="striped">
 			<thead>
-				<tr><th width="200" data-field="time">Time</th><th width="300" data-field="sender">Recipients</th><th width="350" data-field="case">Customer Case</th><th data-field="message">Message</th><th width="150" data-field="status">Status</th><th width="150" data-field="author">Author</th><th width="50" data-field="action"></th></tr>
+				<tr><th width="200px" data-field="time">Time</th><th width="250px" data-field="sender">Recipients</th><th width="250px" data-field="case">Customer Case</th><th data-field="message">Message</th><th width="100px" data-field="status">Status</th><th width="100" data-field="author">Author</th><th width="50" data-field="action"></th></tr>
 			</thead>
 			<tbody>
 				<?php
@@ -230,7 +230,7 @@ if($totCont == 0) {
 									<a href="https://crm.zoho.com/crm/GlobalSearch1.do?sModules=AllEntities&searchword=<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">CRM</a>
 									<a href="https://support.zoho.com/support/cermati/ShowHomePage.do#Cases/search/CurDep/<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">SUPPORT</a>
 								</td>
-								<td style='word-wrap:break-word'><?php echo $case; ?></td>
+								<td style='word-wrap:break-word;'><?php echo $case; ?></td>
 								<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; ?></td>
 								<td class='".$color."-text'><?php echo $status; ?></td>
 								<td><?php echo $msg['CreatorID']; ?></td>

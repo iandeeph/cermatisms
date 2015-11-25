@@ -76,7 +76,7 @@ while($mergerow = mysql_fetch_array($mergequery)){
 		?>
 	<span style="display:inline-block; width:150px"><?php echo $mergerow['date'];?></span>
 	<span style="display:inline-block; width:350px"><?php echo $name;?></span>
-	<span style="display:inline-block; width:700px"><?php echo $case;?></span>
+	<span style="display:inline-block;"><?php echo $case;?></span>
 		</a>
 		<?php
 		}else{
