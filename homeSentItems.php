@@ -140,7 +140,7 @@ if($totCont == 0) {
 	<div class="col s12">
 		<table class="striped">
 			<thead>
-				<tr><th width="200px" data-field="time">Time</th><th width="250px" data-field="sender">Recipients</th><th width="250px" data-field="case">Customer Case</th><th data-field="message">Message</th><th width="100px" data-field="status">Status</th><th width="100" data-field="author">Author</th><th width="50" data-field="action"></th></tr>
+				<tr><th width="150px" data-field="time">Time</th><th width="200px" data-field="sender">Recipients</th><th width="200px" data-field="case">Customer Case</th><th data-field="message">Message</th><th width="100px" data-field="status">Status</th><th width="100" data-field="author">Author</th><th width="50" data-field="action"></th></tr>
 			</thead>
 			<tbody>
 				<?php
