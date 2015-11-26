@@ -201,33 +201,29 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
         if(!empty($_POST['statusSentFilter'])){
             $postStatusSentFilter = $_POST['statusSentFilter'];
 
-            switch ($postStatusSentFilter) {
-                case 'Sent':
-                    $statusFilter = "Status LIKE 'SendingOK%'";
-                    $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
-                    $_SESSION['labelStatusFilter']   = $labelStatusFilter;
-                    $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
-                    break;
-                case 'Failed':
-                    $statusFilter = "Status = 'SendingError' OR Status = 'DeliveryFailed' OR Status = 'Error'";
-                    $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
-                    $_SESSION['labelStatusFilter']   = $labelStatusFilter;
-                    $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
-                    break;
-                case 'All':
+            if($postStatusSentFilter == "Sent"){
+                $statusFilter = "Status LIKE 'SendingOK%'";
+                $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
+                $_SESSION['labelStatusFilter']   = $labelStatusFilter;
+                $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
+            }else if($postStatusSentFilter == "Failed"){
+                $statusFilter = "Status = 'SendingError' OR Status = 'DeliveryFailed' OR Status = 'Error'";
+                $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
+                $_SESSION['labelStatusFilter']   = $labelStatusFilter;
+                $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
+            }else if($postStatusSentFilter == "ALL"){
                     $statusFilter = "Status LIKE '%'";
                     $labelStatusFilter = "Status Filter : <b>".$postStatusSentFilter."</b>";
                     $_SESSION['labelStatusFilter']   = $labelStatusFilter;
                     $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
-                    break;
-
-                default:
-                    $statusFilter = "Status LIKE '%'";
-                    unset($_SESSION['labelStatusFilter']);
-                    unset($_SESSION['postStatusSentFilter']);
-                    break;
             }
+            
+        }else{
+            $statusFilter = "Status NOT LIKE '%'";
+            unset($_SESSION['labelStatusFilter']);
+            unset($_SESSION['postStatusSentFilter']);
         }
+
     //---------------------->> Filtering By Author
         if(!empty($_POST['authorSentFilter'])){
             $postAuthorSentFilter = $_POST['authorSentFilter'];
