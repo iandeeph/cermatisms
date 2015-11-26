@@ -166,10 +166,7 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
             $resultNumber2 = array();
             if(mysql_num_rows($qryCaseFilter)){
                 while($rowCaseFilter = mysql_fetch_array($qryCaseFilter)){
-                    if (substr($rowCaseFilter['phone'], 0, 1)  ===  "0") {
-                        $replaceReceipent2 = '+62'.substr($rowCaseFilter['phone'], 1);
-                    }
-                    $resultNumber2[] = "DestinationNumber='".$replaceReceipent2."'";
+                    $resultNumber2[] = "DestinationNumber='".$rowCaseFilter['phone']."'";
                 }
                 $postNumberFilterByCase = join(' OR ', $resultNumber2);
             }else{
@@ -198,7 +195,7 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
 
         }
     //---------------------->> Filtering By Status
-        if(!empty($_POST['statusSentFilter'])){
+        if(isset($_POST['statusSentFilter'])){
             $postStatusSentFilter = $_POST['statusSentFilter'];
 
             if($postStatusSentFilter == "Sent"){
@@ -217,9 +214,9 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
                     $_SESSION['labelStatusFilter']   = $labelStatusFilter;
                     $_SESSION['postStatusSentFilter']= $postStatusSentFilter;
             }
-            
+
         }else{
-            $statusFilter = "Status NOT LIKE '%'";
+            $statusFilter = "Status LIKE '%'";
             unset($_SESSION['labelStatusFilter']);
             unset($_SESSION['postStatusSentFilter']);
         }
