@@ -98,7 +98,7 @@ $mergetable1 = "SELECT
 								replace(replace(DestinationNumber,'+62','0'), '+628', '08') as number, 
 								count(TextDecoded) as TotalSMS 
 								FROM sentitems
-								WHERE CreatorID != 'admin'
+								WHERE CreatorID NOT LIKE '%admin'
 								GROUP BY number) t 
 						GROUP BY number) mergetable
 				ORDER BY time DESC";
@@ -176,7 +176,7 @@ $mergetable = "SELECT
 								replace(replace(DestinationNumber,'+62','0'), '+628', '08') as number, 
 								count(TextDecoded) as TotalSMS 
 								FROM sentitems
-								WHERE CreatorID != 'admin'
+								WHERE CreatorID NOT LIKE '%admin'
 								GROUP BY number) t 
 						GROUP BY number) mergetable
 				ORDER BY time DESC LIMIT ".$perPages." OFFSET ".$start."";

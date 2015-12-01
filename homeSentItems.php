@@ -7,7 +7,7 @@ $perPages = 13;
 if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 $getSentitems = mysql_query("SELECT * FROM sentitems");
 }else{
-$getSentitems = mysql_query("SELECT * FROM sentitems WHERE CreatorID != 'admin'");
+$getSentitems = mysql_query("SELECT * FROM sentitems WHERE CreatorID NOT LIKE '%admin'");
 }
 $totCont = mysql_num_rows($getSentitems);
 $totPages = ceil($totCont/$perPages);
@@ -64,7 +64,7 @@ ifSubmitSentFilter($oldestDate, $newestDate);
 if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 $getPendingitems = mysql_query("SELECT * FROM outbox");
 }else{
-$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID != 'admin'");
+$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID NOT LIKE '%admin'");
 }
 
 $totCont = mysql_num_rows($getPendingitems);

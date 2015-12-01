@@ -7,7 +7,7 @@ $perPages = 20;
 if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 $getPendingitems = mysql_query("SELECT * FROM outbox");
 }else{
-$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID != 'admin'");
+$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID NOT LIKE '%admin'");
 }
 
 $totCont = mysql_num_rows($getPendingitems);
@@ -93,7 +93,7 @@ if ($curPages < $tpages) {
 										DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
 										CreatorID
 										FROM outbox 
-										WHERE CreatorID != 'admin' 
+										WHERE CreatorID NOT LIKE '%admin' 
 										ORDER BY SendingDateTime 
 										DESC LIMIT ".$perPages." 
 										OFFSET ".$start." ");
