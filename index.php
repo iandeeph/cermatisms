@@ -1,6 +1,7 @@
 <?php
 ob_start();
 ini_set("display_errors", "1");
+ini_set('error_reporting', E_ALL);
 error_reporting(E_ALL);
 session_start();
 require "php/connconf.php";
@@ -271,6 +272,11 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
          padding-left: 240px;
         }
 
+        @media only screen and (max-width : 992px) {
+            header, main, footer {
+            padding-left: 0; } 
+        }
+
         .pagination {
          display: inline-block;
         }
@@ -291,7 +297,7 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
             </div>
         </nav>
         <div class="container">
-        <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="mdi-navigation-menu"></i></a>
+            <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
         </div>
         <ul id="nav-mobile" class="side-nav fixed">
             <li class="logo center" style="height:100px;">
@@ -346,83 +352,83 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
         </ul>
     </header>
     <main>
-	<div class="row">
-		<div class="col s12">
-			<!-- page content  start-->
-			<?php
-				if(isset($_SESSION['logged'])) {
-				switch ($menu) {
-					case 'sendsms':
-						// <!-- Send SMS Form Start  --> 
-							include "sendsms.php";
-						//<!-- Send SMS Form End  -->
-						break;
-					case 'cekinbox':
-						// <!-- Inbox Start  -->
-							include "inbox.php";
-						//<!-- Inbox End  -->
-						break;
-					case 'sentitem':
-						// <!-- Inbox Start  -->
-							include "sentitem.php";
-						//<!-- Inbox End  -->
-						break;
-                    case 'pending':
-                        // <!-- Inbox Start  -->
-                            include "pending.php";
-                        //<!-- Inbox End  -->
-                        break;
-                    case 'thread':
-                        // <!-- thread Start  -->
-                            include "thread.php";
-                        //<!-- thread End  -->
-                        break;
-                    case 'mythread':
-                        // <!-- thread Start  -->
-                            include "mythread.php";
-                        //<!-- thread End  -->
-                        break;
-                    case 'blasting':
-                        // <!-- SMS BLASTING Start  -->
-                            include "blasting.php";
-                        //<!-- SMS BLASTING End  -->
-                        break;
-                    case 'report':
-                        // <!-- report Start  -->
-                            include "csreport.php";
-                        //<!-- report End  -->
-                        break;
-                    case 'logreport':
-                        // <!-- log Start  -->
-                            include "logreport.php";
-                        //<!-- log End  -->
-                        break;
-                    case 'simulation':
-                        // <!-- log Start  -->
-                            include "simulation.php";
-                        //<!-- log End  -->
-                        break;
-					case 'logout':
-						// <!-- logout Start  -->
-							include "logout.php";
-						//<!-- logout End  -->
-						break;
-					
-					default:
-						// <!-- home Start  -->
-							include "sendsms.php";
-						//<!-- home End  -->
-						break;
-				}
-			} else {
-				// <!-- Login Page Start -->
-  					include "login.php"; 
-				// <!-- Login Page End -->
-			}
-			?>
-		<!-- page content end-->
-		</div>
-	 </div>
+    	<div class="row">
+    		<div class="col s12">
+    			<!-- page content  start-->
+    			<?php
+    				if(isset($_SESSION['logged'])) {
+    				switch ($menu) {
+    					case 'sendsms':
+    						// <!-- Send SMS Form Start  --> 
+    							include "sendsms.php";
+    						//<!-- Send SMS Form End  -->
+    						break;
+    					case 'cekinbox':
+    						// <!-- Inbox Start  -->
+    							include "inbox.php";
+    						//<!-- Inbox End  -->
+    						break;
+    					case 'sentitem':
+    						// <!-- Inbox Start  -->
+    							include "sentitem.php";
+    						//<!-- Inbox End  -->
+    						break;
+                        case 'pending':
+                            // <!-- Inbox Start  -->
+                                include "pending.php";
+                            //<!-- Inbox End  -->
+                            break;
+                        case 'thread':
+                            // <!-- thread Start  -->
+                                include "thread.php";
+                            //<!-- thread End  -->
+                            break;
+                        case 'mythread':
+                            // <!-- thread Start  -->
+                                include "mythread.php";
+                            //<!-- thread End  -->
+                            break;
+                        case 'blasting':
+                            // <!-- SMS BLASTING Start  -->
+                                include "blasting.php";
+                            //<!-- SMS BLASTING End  -->
+                            break;
+                        case 'report':
+                            // <!-- report Start  -->
+                                include "csreport.php";
+                            //<!-- report End  -->
+                            break;
+                        case 'logreport':
+                            // <!-- log Start  -->
+                                include "logreport.php";
+                            //<!-- log End  -->
+                            break;
+                        case 'simulation':
+                            // <!-- log Start  -->
+                                include "simulation.php";
+                            //<!-- log End  -->
+                            break;
+    					case 'logout':
+    						// <!-- logout Start  -->
+    							include "logout.php";
+    						//<!-- logout End  -->
+    						break;
+    					
+    					default:
+    						// <!-- home Start  -->
+    							include "sendsms.php";
+    						//<!-- home End  -->
+    						break;
+    				}
+    			} else {
+    				// <!-- Login Page Start -->
+      					include "login.php"; 
+    				// <!-- Login Page End -->
+    			}
+    			?>
+    		<!-- page content end-->
+    		</div>
+    	</div>
     </main>
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -529,6 +535,8 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
             $(".clickable-row").click(function() {
                 window.document.location = $(this).data("href");
             });
+
+            $(".button-collapse").sideNav();
 
         });
 
