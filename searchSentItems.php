@@ -313,7 +313,7 @@ if($totCont == 0) {
 				    	echo "Error: ".mysql_error($conn);
 				    }
 				}
-
+					$numModal = 1;
 					if($sentItemPerPages && mysql_num_rows($sentItemPerPages) > 0 && isset($_SESSION['priv'])) {
 						while($msg = mysql_fetch_array($sentItemPerPages)) {
 							switch ($msg['Status']){
@@ -356,8 +356,57 @@ if($totCont == 0) {
 								</td>
 								<td style='word-wrap:break-word'><?php echo $case; ?></td>
 								<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; ?></td>
-								<td class='".$color."-text'><?php echo $status; ?></td>
+								<td class='<?php echo $color."-text"; ?>'><?php echo $status; ?></td>
 								<td><?php echo $msg['CreatorID']; ?></td>
+								<td style="vertical-align:middle;">
+							      	<a title="resend sms..." href="<?php echo "#modal".$numModal;?>" class="modal-trigger valign btn-floating btn-small waves-effect waves-light blue lighten-2" name="resend"><i class="material-icons">repeat</i></a>
+							    </td>
+							    <!-- Modal Structure -->
+							    <?php
+							    $qryLogForResend = mysql_query("SELECT *, replace(replace(phone,'+62','0'), '+628', '08') as number, DATE_FORMAT(date, '%e %b %Y  %k:%i') as time FROM log WHERE (message LIKE '%".$msg['TextDecoded']."%' AND phone = '".$msg['number']."')");
+							    $rowResend = mysql_fetch_array($qryLogForResend);
+							    ?>
+								<div id="<?php echo "modal".$numModal;?>" class="modal modal-fixed-footer">
+									<form class="col s10" method="POST" action="" style="padding-bottom:50px; padding-top:10px;">
+										<div class="modal-content">
+											<h4>Resend Message</h4>
+											<div class="input-field col s8 ">
+												<i class="material-icons prefix">account_circle</i>
+												<input value="<?php echo $rowResend['name']; ?>" id="resendCustName" type="text" class="validate" name="resendCustName" required >
+												<label for="resendCustName">Customer Name</label>
+											</div>
+											<div class="input-field col s6 ">
+												<i class="material-icons prefix">contact_phone</i>
+												<input value="<?php echo $rowResend['number']; ?>" id="resendCustPhone" type="tel" class="validate" name="resendCustPhone" pattern="^0[0-9]{9,12}|^\(?\+62[0-9]{9,12}" required >
+												<label for="resendCustPhone">Phone Number</label>
+											</div>
+											<div class="input-field col s12 ">
+												<i class="material-icons prefix">work</i>
+												<input value="<?php echo $rowResend['hal']; ?>" id="resendCustCase" type="text" class="validate" name="resendCustCase" required >
+												<label for="resendCustCase">Customer Case</label>
+											</div>
+											<div class="input-field col s12">
+												<i class="material-icons prefix">mode_edit</i>
+												<textarea id="resendCustMessage" class="materialize-textarea" length="160" name="resendCustMessage" required><?php echo $rowResend['message']; ?></textarea>
+												<label for="resendCustMessage">Your Message</label>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat blue lighten-2" name="<?php echo "resendButton".$numModal;?>"><i class="material-icons right">send</i>Resend</button>
+											<a type="cancel" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+										</div>
+										<?php
+											if(isset($_POST['resendButton'.$numModal])) {
+												$postNumber=$_POST['resendCustPhone'];
+												$postMsg=$_POST['resendCustMessage'];
+												$postname=$_POST['resendCustName'];
+												$postcase=$_POST['resendCustCase'];
+												$user=$_SESSION['user'];
+												sendSms($postNumber, $postMsg, $postname, $postcase, $user);
+											}
+										?>
+									</form>
+								</div>
 								<td style="vertical-align:middle;">
 									<form class="" method="POST" action="">
 										<input name="number" type="hidden" value="<?php echo $msg['number'];?>">
@@ -371,6 +420,7 @@ if($totCont == 0) {
 							    </td>
 							</tr>
 						<?php
+						$numModal++;
 					}
 				}
 				?>
