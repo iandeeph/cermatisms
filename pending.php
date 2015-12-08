@@ -127,7 +127,7 @@ if ($curPages < $tpages) {
 										<a href="https://support.zoho.com/support/cermati/ShowHomePage.do#Cases/search/CurDep/<?php echo $msg['number'] ?>" target="_blank" class="waves-effect waves-light btn blue lighten-2">SUPPORT</a>
 									</td>
 									<td style='word-wrap:break-word'><?php echo $case; ?></td>
-									<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; ?></td>
+									<td style='word-wrap:break-word'><?php echo $msg['TextDecoded']; if($msg['MultiPart'] == 'true'){echo "...";} else{ echo "";} ?></td>
 									<td class='".$color."-text'><?php echo $status; ?></td>
 									<td><?php echo $msg['CreatorID']; ?></td>
 								</tr>

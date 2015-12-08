@@ -249,6 +249,88 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
     }
 }
 
+function sendSms($postNumber, $postMsg, $postname, $postcase, $user){
+    $msg = array();
+    $totSmsPage = ceil(strlen($postMsg)/160);
+
+    $query = "SHOW TABLE STATUS LIKE 'outbox'";
+    $result = mysql_query($query);
+    $data  = mysql_fetch_array($result);
+    $newID = $data['Auto_increment'];
+
+    echo $totSmsPage;
+
+    if($totSmsPage == 1){
+        $inserttooutbox1 = "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) 
+                            VALUES ('".$postNumber."', '".$postMsg."', '".$user."')";
+        $logging1 = "INSERT INTO log (user, action, date, messageID, phone, name, hal, message) 
+                    VALUES ('".$user."', 'Sending Message', now(), '".$newID."', '".$postNumber."', '".$postname."', '".$postcase."', '".$postMsg."')";
+        $inserttocustomer1 = "INSERT INTO customer (name, phone, hal, smsID) 
+                    VALUES ('".$postname."', '".$postNumber."', '".$postcase."', '".$newID."')";
+
+        if (mysql_query($inserttooutbox1)) {
+            if ($_GET['menu'] == "sendsms") {
+                echo "Message sent to ".$postNumber;
+            }else{
+                echo "";
+            }
+        } else {
+            echo "Error: ".$inserttooutbox1. " ".mysql_error($conn);
+        }
+
+        if (!mysql_query($logging1)) {
+            echo "Error: ".$logging1. " ".mysql_error($conn);
+        }
+
+        if (!mysql_query($inserttocustomer1)) {
+            echo "Error: ".$inserttocustomer1. " ".mysql_error($conn);
+        }
+    }else{
+        $hitsplit = ceil(strlen($postMsg)/153);
+        $split  = str_split($postMsg, 153);
+
+        $query = "SHOW TABLE STATUS LIKE 'outbox'";
+        $result = mysql_query($query);
+        $data  = mysql_fetch_array($result);
+        $newID = $data['Auto_increment'];
+
+        for ($i=1; $i<=$totSmsPage; $i++){
+            $udh = "050003A7".sprintf("%02s", $hitsplit).sprintf("%02s", $i);
+            $msg = $split[$i-1];
+
+            if ($i == 1){
+                $inserttooutbox = "INSERT INTO outbox (DestinationNumber, UDH, TextDecoded, ID, MultiPart, CreatorID, Class)
+                VALUES ('".$postNumber."', '".$udh."', '".$msg."', '".$newID."', 'true', '".$user."', '-1')";
+                $logging = "INSERT INTO log (user, action, date, messageID, phone, name, hal, message) 
+                VALUES ('".$user."', 'Sending Multiple Message', now(), '".$newID."', '".$postNumber."', '".$postname."', '".$postcase."', '".$postMsg."')";
+                $inserttocustomer = "INSERT INTO customer (name, phone, hal, smsID) 
+                VALUES ('".$postname."', '".$postNumber."', '".$postcase."', '".$newID."')";
+                if (!mysql_query($logging)) {
+                    echo "Error: ".$logging. " ".mysql_error($conn);
+                }
+                if (!mysql_query($inserttocustomer)) {
+                    echo "Error: ".$inserttocustomer. " ".mysql_error($conn);
+                }
+
+            }else{
+                $inserttooutbox = "INSERT INTO outbox_multipart(UDH, TextDecoded, ID, SequencePosition)
+                VALUES ('".$udh."', '".$msg."', '".$newID."', '".$i."')";
+            }
+            if (mysql_query($inserttooutbox)) {
+                if ($i == 1){
+                    if ($_GET['menu'] == "sendsms") {
+                        echo "Message sent to ".$postNumber;
+                    }else{
+                        echo "";
+                    }
+                }
+            } else {
+                echo "Error: ".$inserttooutbox. " ".mysql_error($conn);
+            }
+        } 
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -537,6 +619,8 @@ function ifSubmitSentFilter($oldestDate, $newestDate){
             });
 
             $(".button-collapse").sideNav();
+
+            $('.modal-trigger').leanModal();
 
         });
 
