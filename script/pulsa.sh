@@ -15,13 +15,13 @@ XL=(087780867200 087886347632 087883072681 087886340681)
 INDOSAT=(081513779454 085710250748 085710250739)
 
 echo "Resarting openvox..."
-# echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${TELKOMSEL[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
-# echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${TELKOMSEL[5]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
-# echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${XL[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
-# echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${INDOSAT[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
+echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${TELKOMSEL[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
+echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${TELKOMSEL[5]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
+echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${XL[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
+echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('${INDOSAT[0]}', 'system restart c3rmat', 'BashAdmin');"| mysql -h1.1.1.107 -uroot -pc3rmat sms
 sleep 3m
 
-
+echo $(rm -rf /home/cermati/.ssh/known_hosts)
 echo "Checking Pulsa Telkomsel1..."
 # telkomsel1_Pulsa="1:Failed"
 telkomsel1_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.2 -p12345 "asterisk -rx 'gsm send ussd 1 *888#'")
@@ -80,7 +80,7 @@ fi
 
 echo "Checking Pulsa Telkomsel5..."
 # telkomsel5_Pulsa="1:Recive USSD on span 1,responses:1,code:0 Text:Sisa pulsa Rp.23041.Aktif sd 25/11/2016. Mau MP3 RizkiRidho D2 Academy? Download MP3nya 1.YA 2.Info Kartu"
-telkomsel5_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 1 *888#'")
+telkomsel5_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 1 *888#'")
 cekString=${telkomsel5_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	telkomsel5_Pulsa=${telkomsel5_Pulsa:62:6}
@@ -94,7 +94,7 @@ fi
 
 echo "Checking Pulsa Telkomsel6..."
 # telkomsel5_Pulsa="1:Recive USSD on span 1,responses:1,code:0 Text:Sisa pulsa Rp.23041.Aktif sd 25/11/2016. Mau MP3 RizkiRidho D2 Academy? Download MP3nya 1.YA 2.Info Kartu"
-telkomsel6_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 2 *888#'")
+telkomsel6_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 2 *888#'")
 cekString=${telkomsel6_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	telkomsel6_Pulsa=${telkomsel6_Pulsa:62:6}
@@ -108,7 +108,7 @@ fi
 
 echo "Checking Pulsa Telkomsel7..."
 # telkomsel5_Pulsa="1:Recive USSD on span 1,responses:1,code:0 Text:Sisa pulsa Rp.23041.Aktif sd 25/11/2016. Mau MP3 RizkiRidho D2 Academy? Download MP3nya 1.YA 2.Info Kartu"
-telkomsel7_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 3 *888#'")
+telkomsel7_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 3 *888#'")
 cekString=${telkomsel7_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	telkomsel7_Pulsa=${telkomsel7_Pulsa:62:6}
@@ -122,7 +122,7 @@ fi
 
 echo "Checking Pulsa Telkomsel8..."
 # telkomsel5_Pulsa="1:Recive USSD on span 1,responses:1,code:0 Text:Sisa pulsa Rp.23041.Aktif sd 25/11/2016. Mau MP3 RizkiRidho D2 Academy? Download MP3nya 1.YA 2.Info Kartu"
-telkomsel8_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 4 *888#'")
+telkomsel8_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.3 -p12345 "asterisk -rx 'gsm send ussd 4 *888#'")
 cekString=${telkomsel8_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	telkomsel8_Pulsa=${telkomsel8_Pulsa:62:6}
@@ -136,7 +136,7 @@ fi
 
 echo "Checking Pulsa Telkomsel9..."
 # telkomsel5_Pulsa="1:Recive USSD on span 1,responses:1,code:0 Text:Sisa pulsa Rp.23041.Aktif sd 25/11/2016. Mau MP3 RizkiRidho D2 Academy? Download MP3nya 1.YA 2.Info Kartu"
-telkomsel9_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 1 *888#'")
+telkomsel9_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 1 *888#'")
 cekString=${telkomsel9_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	telkomsel9_Pulsa=${telkomsel9_Pulsa:62:6}
@@ -192,7 +192,7 @@ fi
 
 echo "Checking Pulsa XL4..."
 # XL4_Pulsa="1:Failed"
-XL4_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.5 -p12345 "asterisk -rx 'gsm send ussd 4 *123#'")
+XL4_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.5 -p12345 "asterisk -rx 'gsm send ussd 4 *123#'")
 cekString=${XL4_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
 	XL4_Pulsa=${XL4_Pulsa:55:6}
@@ -206,10 +206,10 @@ fi
 
 echo "Checking Pulsa Indosat..."
 # indosat_Pulsa="1:Recive USSD on span 3,responses:2,code:15 Text:PulsaUTAMA Rp.58600. Aktif 27.02.16, Tenggang 28.03.16.Dptkn 10GB di 4G,konten&Bns 10rb mnt. cek: *123*46#"
-indosat_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 2 *555#'")
+indosat_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 2 *123#'")
 cekString=${indosat_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
-	indosat_Pulsa=${indosat_Pulsa:62:6}
+	indosat_Pulsa=${indosat_Pulsa:57:6}
 	indosat_Pulsa=${indosat_Pulsa//[. Aktif]/}
 	indosat_Pulsa=$((indosat_Pulsa + 0))
 	indosatPulsaArray[0]=$indosat_Pulsa
@@ -220,10 +220,10 @@ fi
 
 echo "Checking Pulsa Indosat2..."
 # indosat2_Pulsa="1:Recive USSD on span 3,responses:2,code:15 Text:PulsaUTAMA Rp.58600. Aktif 27.02.16, Tenggang 28.03.16.Dptkn 10GB di 4G,konten&Bns 10rb mnt. cek: *123*46#"
-indosat2_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 3 *555#'")
+indosat2_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 3 *123#'")
 cekString=${indosat2_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
-	indosat2_Pulsa=${indosat2_Pulsa:62:6}
+	indosat2_Pulsa=${indosat2_Pulsa:57:6}
 	indosat2_Pulsa=${indosat2_Pulsa//[. Aktif]/}
 	indosat2_Pulsa=$((indosat2_Pulsa + 0))
 	indosatPulsaArray[1]=$indosat2_Pulsa
@@ -234,10 +234,10 @@ fi
 
 echo "Checking Pulsa Indosat3..."
 # indosat3_Pulsa="1:Recive USSD on span 3,responses:2,code:15 Text:PulsaUTAMA Rp.58600. Aktif 27.02.16, Tenggang 28.03.16.Dptkn 10GB di 4G,konten&Bns 10rb mnt. cek: *123*46#"
-indosat3_Pulsa=$(sshpass -pc3rmat ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 4 *555#'")
+indosat3_Pulsa=$(sshpass -padmin ssh -o StrictHostKeyChecking=no admin@3.3.3.4 -p12345 "asterisk -rx 'gsm send ussd 4 *123#'")
 cekString=${indosat3_Pulsa:2:6}
 if [ "$cekString" = "Recive" ]; then
-	indosat3_Pulsa=${indosat3_Pulsa:62:6}
+	indosat3_Pulsa=${indosat3_Pulsa:57:6}
 	indosat3_Pulsa=${indosat3_Pulsa//[. Aktif]/}
 	indosat3_Pulsa=$((indosat3_Pulsa + 0))
 	indosatPulsaArray[2]=$indosat3_Pulsa
@@ -318,3 +318,4 @@ do
 		echo "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) VALUES ('$TUKANGKETIK', '${INDOSAT[$numIndosat]} gagal cek pulsa', 'BashAdmin');" | mysql -h1.1.1.107 -uroot -pc3rmat sms
 	fi
 	numIndosat=$((numIndosat + 1))
+done
