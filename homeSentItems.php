@@ -5,9 +5,9 @@ if(!isset($_GET['pages'])){
 $userpriv = $_SESSION['priv'];
 $perPages = 13;
 if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
-$getSentitems = mysql_query("SELECT * FROM sentitems");
+	$getSentitems = mysql_query("SELECT * FROM sentitems");
 }else{
-$getSentitems = mysql_query("SELECT * FROM sentitems WHERE CreatorID NOT LIKE '%admin'");
+	$getSentitems = mysql_query("SELECT * FROM sentitems WHERE CreatorID NOT LIKE '%admin'");
 }
 $totCont = mysql_num_rows($getSentitems);
 $totPages = ceil($totCont/$perPages);
@@ -186,7 +186,7 @@ if($totCont == 0) {
 										DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
 										CreatorID
 										FROM sentitems 
-										WHERE CreatorID != 'admin' 
+										WHERE CreatorID NOT LIKE '%admin' 
 										ORDER BY SendingDateTime 
 										DESC LIMIT ".$perPages." 
 										OFFSET ".$start." ");

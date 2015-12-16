@@ -105,7 +105,7 @@ if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 					DATE_FORMAT(SendingDateTime, '%e %b %Y - %k:%i') as date, 
 					CreatorID
 					FROM sentitems 
-					WHERE ".$whereFilter." AND CreatorID != 'admin' 
+					WHERE ".$whereFilter." AND CreatorID NOT LIKE '%admin' 
 					ORDER BY SendingDateTime 
 					DESC LIMIT ".$perPages." 
 					OFFSET ".$start." ");
@@ -122,7 +122,7 @@ if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 if(isset($_SESSION['priv']) && $_SESSION['priv'] == '2' ){
 $getPendingitems = mysql_query("SELECT * FROM outbox");
 }else{
-$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID != 'admin'");
+$getPendingitems = mysql_query("SELECT * FROM outbox WHERE CreatorID NOT LIKE '%admin'");
 }
 
 $totCont = mysql_num_rows($getPendingitems);
