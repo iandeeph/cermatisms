@@ -258,8 +258,6 @@ function sendSms($postNumber, $postMsg, $postname, $postcase, $user){
     $data  = mysql_fetch_array($result);
     $newID = $data['Auto_increment'];
 
-    echo $totSmsPage;
-
     if($totSmsPage == 1){
         $inserttooutbox1 = "INSERT INTO outbox (DestinationNumber, TextDecoded, CreatorID) 
                             VALUES ('".$postNumber."', '".$postMsg."', '".$user."')";
@@ -634,6 +632,24 @@ function sendSms($postNumber, $postMsg, $postname, $postcase, $user){
             $("#caseSentFilter").val("");
             $("#messageSentFilter").val("");
         });
-    </script>
+
+        $('#allActionCheckbox').change(function() {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            if($(this).is(':checked')) {
+                checkboxes.attr('checked', true);
+            } else {
+                checkboxes.removeAttr('checked');
+            }
+        });
+
+        $('input:checkbox').change(function () {
+            if ($(this).is(':checked')) {
+                $('#deleteAll, #resendAll').removeClass('disabled');
+            } else if (($(this).not(':checked')) && ($("input:checkbox:checked").length <= 0)) {
+                $('#deleteAll, #resendAll').addClass('disabled');
+            }
+        });
+
+</script>
   </body>
 </html>
