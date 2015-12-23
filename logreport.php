@@ -121,14 +121,14 @@
 		<table class="striped">
 			<thead>
 				<tr>
-					<th width="200" data-field="time">Time</th>
-					<th width="150" data-field="user">User</th>
-					<th width="300" data-field="action">Action</th>
-					<th width="200" data-field="number">Number</th>
-					<th width="300" data-field="name">Name</th>
-					<th width="500" data-field="case">Case</th>
-					<th width="100" data-field="id">ID Message</th>
-					<th width="750" data-field="message">Message</th>
+					<th width="100" data-field="time">Time</th>
+					<th width="50" data-field="user">User</th>
+					<th width="150" data-field="action">Action</th>
+					<th width="100" data-field="number">Number</th>
+					<th width="150" data-field="name">Name</th>
+					<th width="100" data-field="case">Case</th>
+					<th width="50" data-field="id">ID Message</th>
+					<th data-field="message">Message</th>
 					<th width="50" data-field="delete"></th>
 				</tr>
 			</thead>
